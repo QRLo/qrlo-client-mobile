@@ -24,7 +24,10 @@ class BackendClient {
     );
     _dio = new Dio(baseOptions);
     _dio.interceptors.addAll([
-      LogInterceptor(),
+      LogInterceptor(
+        requestHeader: true,
+        responseBody: true,
+      ),
       InterceptorsWrapper(onRequest: (RequestOptions options) {
         // Do something before request is sent
         if (_accessToken != null) {
@@ -35,7 +38,6 @@ class BackendClient {
         if (e.response?.statusCode == 401 &&
             e.request?.path != null &&
             !e.request.path.startsWith('auth')) {
-          print("???");
           await getIt<AuthService>().refreshToken();
 
           RequestOptions request = e.response.request;

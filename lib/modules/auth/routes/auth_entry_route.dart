@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qrlo_mobile/modules/auth/ui/pages/auth_entry_page.dart';
 import 'package:qrlo_mobile/shared/base_route.dart';
 
-class AuthRoute extends BaseRoute {
+class AuthEntryRoute extends BaseRoute {
   @override
   String get url => "/auth";
   @override

@@ -32,6 +32,9 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
   Widget build(BuildContext context) {
     if (!isDenied) {
       scan(context);
+      return Column(
+        children: [],
+      );
     }
 
     return Center(
