@@ -1,3 +1,4 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
@@ -73,16 +74,14 @@ class SettingsView extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                   ),
                   title: Text("Log Out"),
-                  onTap: () async {
-                    final authState =
-                        Provider.of<AuthState>(context, listen: false);
-                    authState.logOut().then((_) {
-                      getIt<RoutesManager>().router.navigateTo(
-                            context,
-                            AuthEntryRoute().url,
-                            replace: true,
-                          );
-                    });
+                  onTap: () {
+                    context.read<AuthState>().logOut();
+                    getIt<RoutesManager>().router.navigateTo(
+                          context,
+                          AuthEntryRoute().url,
+                          replace: true,
+                          transition: TransitionType.fadeIn,
+                        );
                   },
                 ),
               ],

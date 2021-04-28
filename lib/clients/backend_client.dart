@@ -13,6 +13,7 @@ import 'package:qrlo_mobile/modules/auth/services/auth_service.dart';
 @injectable
 class BackendClient {
   static const BASE_URL = "http://192.168.2.10:3000/api/v1/";
+  // static const BASE_URL = "http://localhost:3000/api/v1/";
   Dio _dio;
   String _accessToken;
 
@@ -29,7 +30,6 @@ class BackendClient {
         responseBody: true,
       ),
       InterceptorsWrapper(onRequest: (RequestOptions options) {
-        // Do something before request is sent
         if (_accessToken != null) {
           options.headers["Authorization"] = "Bearer " + _accessToken;
         }
@@ -38,7 +38,7 @@ class BackendClient {
         if (e.response?.statusCode == 401 &&
             e.request?.path != null &&
             !e.request.path.startsWith('auth')) {
-          await getIt<AuthService>().refreshToken();
+          await getIt<AuthService>().requestQrloAuthFromStorage();
 
           RequestOptions request = e.response.request;
           request.headers["Authorization"] = _accessToken;
@@ -54,12 +54,11 @@ class BackendClient {
   }
 
   @factoryMethod
-  @preResolve
   static Future<BackendClient> create() async {
     final instance = BackendClient();
-    await instance.conn.get('health-check');
+    await instance.conn.get('health');
     Timer.periodic(new Duration(seconds: 30), (_) async {
-      await getIt<BackendClient>().conn.get('health-check');
+      await getIt<BackendClient>().conn.get('health');
     });
     Directory appDocDir = await getApplicationDocumentsDirectory();
     var cookieJar = PersistCookieJar(
