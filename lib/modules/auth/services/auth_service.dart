@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:qrlo_mobile/clients/backend_client.dart';
@@ -43,7 +44,8 @@ class AuthService {
   }
 
   Future<void> requestQrloAuthFromStorage() async {
-    _doRequestQrloAuth(await _fetchAuthFromStorage());
+    final OAuth oAuth = await _fetchAuthFromStorage();
+    await _doRequestQrloAuth(oAuth);
   }
 
   Future<void> _doRequestQrloAuth(OAuth oAuth) async {
@@ -55,7 +57,7 @@ class AuthService {
   }
 
   Future<void> logOut() async {
-    await _invalidateAuthFromStorage();
+    await storage.delete(key: OAUTH_DATA_STORAGE_KEY);
     backendClient.accessToken = null;
   }
 
@@ -69,9 +71,5 @@ class AuthService {
     final String base64AuthString =
         utf8.fuse(base64).encode(jsonEncode(oAuth.toJson()));
     await storage.write(key: OAUTH_DATA_STORAGE_KEY, value: base64AuthString);
-  }
-
-  Future<void> _invalidateAuthFromStorage() async {
-    await storage.delete(key: OAUTH_DATA_STORAGE_KEY);
   }
 }

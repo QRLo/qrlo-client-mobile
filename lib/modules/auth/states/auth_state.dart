@@ -30,14 +30,9 @@ class AuthState extends ChangeNotifier {
     this.isFetching = true;
     this.isAuthenticated = false;
     notifyListeners();
-    try {
-      await _authService.logOut();
-    } on DioError {
-      this.isAuthenticated = true;
-    } finally {
-      this.isFetching = false;
-      notifyListeners();
-    }
+    await _authService.logOut();
+    this.isFetching = false;
+    notifyListeners();
   }
 
   Future<void> refreshToken() async {
