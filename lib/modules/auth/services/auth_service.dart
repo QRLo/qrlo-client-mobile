@@ -7,7 +7,6 @@ import 'package:qrlo_mobile/modules/auth/models/auth.dart';
 @injectable
 class AuthService {
   Auth auth;
-  bool isFetching = false;
   get backendClient => getIt<BackendClient>();
 
   Future<Auth> loginWithKakao() async {
@@ -45,5 +44,12 @@ class AuthService {
     auth = Auth.fromJson(response.data);
     backendClient.accessToken = auth.jwt;
     return auth;
+  }
+
+  Future<Auth> logOut() async {
+    await Future.delayed(const Duration(seconds: 2));
+    await backendClient.conn.delete("auth");
+    backendClient.accessToken = null;
+    return null;
   }
 }

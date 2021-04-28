@@ -1,13 +1,13 @@
 import 'package:fluro/fluro.dart';
-import 'package:qrlo_mobile/modules/auth/routes/auth_route.dart';
 import 'package:injectable/injectable.dart';
+import 'package:qrlo_mobile/modules/auth/routes/auth_entry_route.dart';
 import 'package:qrlo_mobile/modules/dashboard/routes/dashboard_route.dart';
 import 'package:qrlo_mobile/modules/qrcode/routes/qrcode_save_route.dart';
 
 @injectable
 class RoutesManager {
   static final _routes = [
-    AuthRoute(),
+    AuthEntryRoute(),
     DashboardRoute(),
     QRCodeSaveRoute(),
   ];
@@ -21,5 +21,5 @@ class RoutesManager {
 
   FluroRouter get router => _router;
 
-  String get initialRoute => AuthRoute().url;
+  String get initialRoute => AuthEntryRoute().url;
 }

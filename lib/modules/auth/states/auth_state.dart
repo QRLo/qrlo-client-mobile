@@ -23,6 +23,14 @@ class AuthState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> logOut() async {
+    this.isFetching = true;
+    notifyListeners();
+    this.auth = await _authService.logOut();
+    this.isFetching = false;
+    notifyListeners();
+  }
+
   void setLoading() {
     this.isFetching = true;
     notifyListeners();
