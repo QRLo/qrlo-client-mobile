@@ -1,44 +1,51 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
-import 'package:qrlo_mobile/modules/auth/models/auth.dart';
 import 'package:qrlo_mobile/modules/auth/services/auth_service.dart';
 
 class AuthState extends ChangeNotifier {
-  Auth auth;
-  bool isFetching = false;
+  bool isFetching = true;
   bool isAuthenticated = false;
   AuthService get _authService => getIt<AuthService>();
 
-  Future<void> fetchAuth() async {
-    await Future.delayed(const Duration(seconds: 2));
-    isFetching = true;
-    notifyListeners();
+  AuthState() {
+    refreshToken();
   }
 
   Future<void> loginWithKakao() async {
     this.isFetching = true;
     notifyListeners();
-    this.auth = await _authService.loginWithKakao();
-    this.isFetching = false;
-    notifyListeners();
+    try {
+      await _authService.loginWithKakao();
+      this.isAuthenticated = true;
+    } on DioError {
+      this.isAuthenticated = false;
+    } finally {
+      this.isFetching = false;
+      notifyListeners();
+    }
   }
 
   Future<void> logOut() async {
     this.isFetching = true;
+    this.isAuthenticated = false;
     notifyListeners();
-    this.auth = await _authService.logOut();
+    await _authService.logOut();
     this.isFetching = false;
-    notifyListeners();
-  }
-
-  void setLoading() {
-    this.isFetching = true;
     notifyListeners();
   }
 
   Future<void> refreshToken() async {
-    this.auth = await _authService.refreshToken();
-    this.isFetching = false;
+    this.isFetching = true;
     notifyListeners();
+    try {
+      await _authService.requestQrloAuthFromStorage();
+      this.isAuthenticated = true;
+    } on DioError {
+      this.isAuthenticated = false;
+    } finally {
+      this.isFetching = false;
+      notifyListeners();
+    }
   }
 }
