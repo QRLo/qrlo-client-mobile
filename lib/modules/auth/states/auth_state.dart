@@ -1,11 +1,20 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/modules/auth/services/auth_service.dart';
 
+enum AuthStateEnum {
+  NEED_LOGIN,
+  FETCHING,
+  AUTHENTICATED,
+  REGISTRAION_REQUIRED,
+  REGISTRATION_FAILED
+}
+
 class AuthState extends ChangeNotifier {
-  bool isFetching = true;
-  bool isAuthenticated = false;
+  AuthStateEnum currentState = AuthStateEnum.NEED_LOGIN;
   AuthService get _authService => getIt<AuthService>();
 
   AuthState() {
@@ -13,38 +22,68 @@ class AuthState extends ChangeNotifier {
   }
 
   Future<void> loginWithKakao() async {
-    this.isFetching = true;
+    currentState = AuthStateEnum.FETCHING;
     notifyListeners();
     try {
       await _authService.loginWithKakao();
-      this.isAuthenticated = true;
-    } on DioError {
-      this.isAuthenticated = false;
+      currentState = AuthStateEnum.AUTHENTICATED;
+    } on DioError catch (e) {
+      switch (e.response.statusCode) {
+        case HttpStatus.notFound:
+          {
+            currentState = AuthStateEnum.REGISTRAION_REQUIRED;
+            break;
+          }
+        case HttpStatus.unauthorized:
+        default:
+          {
+            currentState = AuthStateEnum.NEED_LOGIN;
+            break;
+          }
+      }
     } finally {
-      this.isFetching = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> integrateWithOAuth(String email) async {
+    currentState = AuthStateEnum.FETCHING;
+    notifyListeners();
+    try {
+      await _authService.integrateWithOAuth(email);
+      currentState = AuthStateEnum.AUTHENTICATED;
+    } on DioError {
+      currentState = AuthStateEnum.REGISTRATION_FAILED;
+    } finally {
       notifyListeners();
     }
   }
 
   Future<void> logOut() async {
-    this.isFetching = true;
-    this.isAuthenticated = false;
+    currentState = AuthStateEnum.FETCHING;
     notifyListeners();
     await _authService.logOut();
-    this.isFetching = false;
+    currentState = AuthStateEnum.NEED_LOGIN;
     notifyListeners();
   }
 
   Future<void> refreshToken() async {
-    this.isFetching = true;
+    currentState = AuthStateEnum.FETCHING;
     notifyListeners();
     try {
       await _authService.requestQrloAuthFromStorage();
-      this.isAuthenticated = true;
-    } on DioError {
-      this.isAuthenticated = false;
+      currentState = AuthStateEnum.AUTHENTICATED;
+    } on DioError catch (e) {
+      switch (e.response.statusCode) {
+        case HttpStatus.notFound:
+        case HttpStatus.unauthorized:
+        default:
+          {
+            currentState = AuthStateEnum.NEED_LOGIN;
+            break;
+          }
+      }
     } finally {
-      this.isFetching = false;
       notifyListeners();
     }
   }
