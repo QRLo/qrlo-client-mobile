@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qrlo_mobile/modules/dashboard/states/bottom_navigation_state.dart';
 import 'package:qrlo_mobile/modules/data_store/ui/data_store_view.dart';
+import 'package:qrlo_mobile/modules/profile/ui/profile_view.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/qrcode_scan_view.dart';
 import 'package:qrlo_mobile/modules/settings/ui/settings_view.dart';
 
@@ -25,13 +26,14 @@ class DashboardEntryPage extends StatelessWidget {
             body: Builder(
               builder: (context) {
                 switch (provider.currTab) {
+                  case NavigationTab.profile:
+                    return ProfileView();
                   case NavigationTab.scan:
                     return QRCodeScanView();
                   case NavigationTab.settings:
                     return SettingsView();
                   case NavigationTab.saved:
                     return DataStoreView();
-                  case NavigationTab.profile:
                   case NavigationTab.contacts:
                     return Container(
                       child: Center(
