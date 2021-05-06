@@ -6,8 +6,6 @@ import 'package:qrlo_mobile/modules/auth/states/auth_state.dart';
 import 'package:qrlo_mobile/modules/dashboard/routes/dashboard_route.dart';
 
 class AuthSelectionView extends StatelessWidget {
-  const AuthSelectionView({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Container(

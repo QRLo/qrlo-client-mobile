@@ -1,7 +1,7 @@
 import 'package:fluro/fluro.dart';
 
 abstract class BaseRoute {
-  Handler _handler;
+  late Handler _handler;
   BaseRoute() {
     _handler = generateHandler();
   }

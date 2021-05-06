@@ -8,20 +8,19 @@ import 'package:qrlo_mobile/modules/qrcode/ui/preview/qrcode_generic_preview_vie
 
 @injectable
 class QRCodeSaveAdapter {
-  QRCodeAbstractPreviewView adaptQRCodeSaveView(String rawData) {
+  static QRCodeAbstractPreviewView adaptQRCodeSaveView(String rawData) {
     try {
       var jsonData = jsonDecode(rawData);
-      String type = jsonData['type'];
-      switch (type) {
-        case 'businesscard':
-          return QRCodeBusinessCardPreviewView(
-            data: BusinessCard.fromJson(jsonData),
-          );
-        default:
-          return QRCodeGenericPreivewView(
-            data: rawData,
-          );
+      try {
+        return QRCodeBusinessCardPreviewView(
+          data: BusinessCard.fromJson(jsonData),
+        );
+      } catch (e) {
+        print("Not a business card");
       }
+      return QRCodeGenericPreivewView(
+        data: rawData,
+      );
     } on FormatException {
       return QRCodeGenericPreivewView(
         data: rawData,

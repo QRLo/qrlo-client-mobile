@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qrlo_mobile/modules/auth/models/oauth.dart';
 import 'package:qrlo_mobile/modules/auth/models/oauth_type.dart';
@@ -10,9 +9,9 @@ class IntegrateOAuthRequest extends OAuth {
   final String email;
 
   IntegrateOAuthRequest({
-    @required OAuthType oAuthType,
-    @required String oAuthAccessToken,
-    @required this.email,
+    required OAuthType oAuthType,
+    required String oAuthAccessToken,
+    required this.email,
   }) : super(
           oAuthAccessToken: oAuthAccessToken,
           oAuthType: oAuthType,

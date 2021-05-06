@@ -5,11 +5,10 @@ import 'package:qrlo_mobile/modules/qrcode/ui/preview/qrcode_abstract_preview_vi
 class QRCodeBusinessCardPreviewView extends QRCodeAbstractPreviewView {
   final BusinessCard data;
 
-  const QRCodeBusinessCardPreviewView({Key key, this.data}) : super(key: key);
+  QRCodeBusinessCardPreviewView({required this.data});
 
   @override
   Widget build(BuildContext context) {
-    print(data.imageUrl);
     return Container(
       child: LayoutBuilder(
         builder: (context, constraint) {
@@ -22,7 +21,6 @@ class QRCodeBusinessCardPreviewView extends QRCodeAbstractPreviewView {
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(8),
                 children: <Widget>[
-                  Image.network(data.imageUrl),
                   Card(
                     child: ListTile(
                       title: Text('First Name: ${data.firstName}'),
@@ -43,7 +41,7 @@ class QRCodeBusinessCardPreviewView extends QRCodeAbstractPreviewView {
                   ),
                   Card(
                     child: ListTile(
-                      title: Text('Phone Number: ${data.phoneNumber}'),
+                      title: Text('Phone Number: ${data.phone}'),
                       trailing: IconButton(
                         icon: Icon(Icons.edit),
                         onPressed: () {},

@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:barcode_scan_fix/barcode_scan.dart';
+// import 'package:barcode_scan_fix/barcode_scan.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/config/routes_manager.dart';
 import 'package:qrlo_mobile/modules/dashboard/states/bottom_navigation_state.dart';
@@ -13,40 +16,71 @@ import 'package:qrlo_mobile/modules/qrcode/ui/qrcode_save_adapter.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/exceptions/qrcode_not_existent_exception.dart';
 
 class QRCodeScanView extends StatefulWidget {
-  QRCodeScanView({Key key}) : super(key: key);
-
   @override
   _QRCodeScanViewState createState() => _QRCodeScanViewState();
 }
 
 class _QRCodeScanViewState extends State<QRCodeScanView> {
-  String barcode = "";
-  bool isDenied = false;
+  Barcode? result;
+  late QRViewController controller;
 
+  // In order to get hot reload to work we need to pause the camera if the platform
+  // is android, or resume the camera if the platform is iOS.
   @override
-  initState() {
-    super.initState();
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller.resumeCamera();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!isDenied) {
-      scan(context);
-      return Column(
-        children: [],
-      );
-    }
-
-    return Center(
-      child: CircularProgressIndicator(),
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 5,
+            child: QRView(
+              key: GlobalKey(debugLabel: "QR"),
+              onQRViewCreated: _onQRViewCreated,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: (result != null)
+                  ? Text(
+                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                  : Text('Scan a code'),
+            ),
+          )
+        ],
+      ),
     );
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        result = scanData;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   Future scan(BuildContext context) async {
     try {
-      String barcode = await BarcodeScanner.scan();
       QRCodeAbstractPreviewView qrCodeSaveView =
-          getIt<QRCodeSaveAdapter>().adaptQRCodeSaveView(barcode);
+          QRCodeSaveAdapter.adaptQRCodeSaveView(barcode);
       await getIt<RoutesManager>().router.navigateTo(
             context,
             QRCodeSaveRoute().url,
@@ -55,28 +89,22 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
             ),
           );
     } on PlatformException catch (e) {
-      if (e.code == BarcodeScanner.CameraAccessDenied) {
-        setState(() {
-          isDenied = true;
-        });
-      } else {
-        Provider.of<BottomNavigationState>(context, listen: false)
-            .navigateTo(NavigationTab.profile.index);
-      }
+      Provider.of<BottomNavigationState>(context, listen: false)
+          .navigateTo(NavigationTab.profile.index);
     } on FormatException {
       print("Format Exception");
-      bool shouldRetry = await _showFormatExceptionDialog(context);
+      bool? shouldRetry = await _showFormatExceptionDialog(context);
       print(shouldRetry);
-      if (shouldRetry) {
+      if (shouldRetry!) {
         return scan(context);
       } else {
         Provider.of<BottomNavigationState>(context, listen: false).pop();
       }
     } on QRCodeNotExistentException {
       print("Format Exception");
-      bool shouldRetry = await _showFormatExceptionDialog(context);
+      bool? shouldRetry = await _showFormatExceptionDialog(context);
       print(shouldRetry);
-      if (shouldRetry) {
+      if (shouldRetry!) {
         return scan(context);
       } else {
         Provider.of<BottomNavigationState>(context, listen: false).pop();
@@ -88,8 +116,8 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
     }
   }
 
-  Future<bool> _showFormatExceptionDialog(BuildContext context) async {
-    return showDialog(
+  Future<bool?> _showFormatExceptionDialog(BuildContext context) async {
+    return showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {

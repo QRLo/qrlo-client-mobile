@@ -7,8 +7,6 @@ import 'package:qrlo_mobile/modules/qrcode/ui/qrcode_scan_view.dart';
 import 'package:qrlo_mobile/modules/settings/ui/settings_view.dart';
 
 class DashboardEntryPage extends StatelessWidget {
-  const DashboardEntryPage({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(

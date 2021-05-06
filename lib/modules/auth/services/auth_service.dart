@@ -31,7 +31,8 @@ class AuthService {
   }
 
   Future<void> requestQrloAuthFromStorage() async {
-    final OAuth oAuth = await _fetchAuthFromStorage();
+    final OAuth? oAuth = await _fetchAuthFromStorage();
+    if (oAuth == null) return;
     await _doRequestQrloAuth(oAuth);
   }
 
@@ -44,11 +45,11 @@ class AuthService {
   }
 
   Future<void> integrateWithOAuth(String email) async {
-    final OAuth oAuth = await _fetchAuthFromStorage();
+    final OAuth? oAuth = await _fetchAuthFromStorage();
     final IntegrateOAuthRequest integrateOAuthRequest =
         new IntegrateOAuthRequest(
       email: email,
-      oAuthAccessToken: oAuth.oAuthAccessToken,
+      oAuthAccessToken: oAuth!.oAuthAccessToken,
       oAuthType: oAuth.oAuthType,
     );
     var response = await backendClient.conn.post(
@@ -63,9 +64,9 @@ class AuthService {
     backendClient.accessToken = null;
   }
 
-  Future<OAuth> _fetchAuthFromStorage() async {
-    final String storedOAuth = await storage.read(key: OAUTH_DATA_STORAGE_KEY);
-    if (storedOAuth?.isEmpty ?? true) return null;
+  Future<OAuth?> _fetchAuthFromStorage() async {
+    final String? storedOAuth = await storage.read(key: OAUTH_DATA_STORAGE_KEY);
+    if (storedOAuth!.isEmpty) return null;
     return OAuth.fromJson(jsonDecode(utf8.fuse(base64).decode(storedOAuth)));
   }
 

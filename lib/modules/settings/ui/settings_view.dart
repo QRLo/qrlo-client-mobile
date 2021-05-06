@@ -7,8 +7,6 @@ import 'package:qrlo_mobile/modules/auth/routes/auth_entry_route.dart';
 import 'package:qrlo_mobile/modules/auth/states/auth_state.dart';
 
 class SettingsView extends StatelessWidget {
-  const SettingsView({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
