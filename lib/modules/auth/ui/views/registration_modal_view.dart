@@ -5,9 +5,8 @@ import 'package:qrlo_mobile/modules/auth/states/auth_state.dart';
 class RegistrationModalView extends StatefulWidget {
   final BoxConstraints constraints;
   RegistrationModalView({
-    Key key,
-    this.constraints,
-  }) : super(key: key);
+    required this.constraints,
+  });
 
   @override
   _RegistrationModalViewState createState() => _RegistrationModalViewState();
@@ -70,7 +69,7 @@ class _RegistrationModalViewState extends State<RegistrationModalView> {
                     foregroundColor:
                         MaterialStateProperty.all<Color>(Colors.white),
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.grey[800]),
+                        MaterialStateProperty.all<Color>(Colors.grey[800]!),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -93,7 +92,7 @@ class _RegistrationModalViewState extends State<RegistrationModalView> {
                       foregroundColor:
                           MaterialStateProperty.all<Color>(Colors.white),
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.grey[800]),
+                          MaterialStateProperty.all<Color>(Colors.grey[800]!),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),

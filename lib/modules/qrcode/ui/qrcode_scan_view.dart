@@ -1,52 +1,130 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:barcode_scan_fix/barcode_scan.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:device_info/device_info.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/config/routes_manager.dart';
 import 'package:qrlo_mobile/modules/dashboard/states/bottom_navigation_state.dart';
+import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
 import 'package:qrlo_mobile/modules/qrcode/routes/qrcode_save_route.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/preview/qrcode_abstract_preview_view.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/qrcode_save_adapter.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/exceptions/qrcode_not_existent_exception.dart';
 
 class QRCodeScanView extends StatefulWidget {
-  QRCodeScanView({Key key}) : super(key: key);
-
   @override
   _QRCodeScanViewState createState() => _QRCodeScanViewState();
 }
 
 class _QRCodeScanViewState extends State<QRCodeScanView> {
-  String barcode = "";
-  bool isDenied = false;
+  Barcode? result;
+  QRViewController? controller;
+  late bool isPhysicalDevice;
+  final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
 
   @override
-  initState() {
+  void initState() {
     super.initState();
+    isPhysicalDevice = false;
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller?.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller?.resumeCamera();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!isDenied) {
-      scan(context);
-      return Column(
-        children: [],
+    if (!isPhysicalDevice && result == null) {
+      final businessCard = BusinessCard(
+        email: "rollee0429@gmail.com",
+        company: "Apple",
+        firstName: "Ro",
+        lastName: "Lee",
+        phone: "4388837674",
+      );
+      Timer(
+        Duration(seconds: 2),
+        () => onDataRead(Barcode(
+          jsonEncode(businessCard.toJson()),
+          BarcodeFormat.code128,
+          [1, 2],
+        )),
       );
     }
+    return FutureBuilder<dynamic>(
+        future: deviceInfoPlugin.iosInfo,
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-    return Center(
-      child: CircularProgressIndicator(),
-    );
+          if (snapshot.data is IosDeviceInfo) {
+            final IosDeviceInfo iosDeviceInfo = snapshot.data as IosDeviceInfo;
+            isPhysicalDevice = iosDeviceInfo.isPhysicalDevice;
+          } else if (snapshot.data is AndroidDeviceInfo) {
+            final AndroidDeviceInfo androidDeviceInfo =
+                snapshot.data as AndroidDeviceInfo;
+            isPhysicalDevice = androidDeviceInfo.isPhysicalDevice;
+          } else {
+            isPhysicalDevice = false;
+          }
+          return Scaffold(
+            body: Column(
+              children: <Widget>[
+                isPhysicalDevice
+                    ? Expanded(
+                        flex: 5,
+                        child: QRView(
+                          key: GlobalKey(debugLabel: "QR"),
+                          onQRViewCreated: _onQRViewCreated,
+                        ),
+                      )
+                    : Container(),
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: (result != null)
+                        ? Text(
+                            'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                        : Text('Scan a code'),
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 
-  Future scan(BuildContext context) async {
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      onDataRead(scanData);
+    });
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  Future onDataRead(Barcode data) async {
     try {
-      String barcode = await BarcodeScanner.scan();
       QRCodeAbstractPreviewView qrCodeSaveView =
-          getIt<QRCodeSaveAdapter>().adaptQRCodeSaveView(barcode);
+          QRCodeSaveAdapter.adaptQRCodeSaveView(data.code);
       await getIt<RoutesManager>().router.navigateTo(
             context,
             QRCodeSaveRoute().url,
@@ -54,33 +132,19 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
               arguments: qrCodeSaveView,
             ),
           );
-    } on PlatformException catch (e) {
-      if (e.code == BarcodeScanner.CameraAccessDenied) {
-        setState(() {
-          isDenied = true;
-        });
-      } else {
-        Provider.of<BottomNavigationState>(context, listen: false)
-            .navigateTo(NavigationTab.profile.index);
-      }
     } on FormatException {
       print("Format Exception");
-      bool shouldRetry = await _showFormatExceptionDialog(context);
+      bool? shouldRetry = await _showFormatExceptionDialog();
       print(shouldRetry);
-      if (shouldRetry) {
-        return scan(context);
-      } else {
+      if (!shouldRetry!) {
         Provider.of<BottomNavigationState>(context, listen: false).pop();
       }
     } on QRCodeNotExistentException {
       print("Format Exception");
-      bool shouldRetry = await _showFormatExceptionDialog(context);
+      bool? shouldRetry = await _showFormatExceptionDialog();
       print(shouldRetry);
-      if (shouldRetry) {
-        return scan(context);
-      } else {
+      if (!shouldRetry!)
         Provider.of<BottomNavigationState>(context, listen: false).pop();
-      }
     } catch (e) {
       Provider.of<BottomNavigationState>(context, listen: false)
           .navigateTo(NavigationTab.profile.index);
@@ -88,8 +152,8 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
     }
   }
 
-  Future<bool> _showFormatExceptionDialog(BuildContext context) async {
-    return showDialog(
+  Future<bool?> _showFormatExceptionDialog() async {
+    return showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {

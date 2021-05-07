@@ -28,7 +28,7 @@ class AuthState extends ChangeNotifier {
       await _authService.loginWithKakao();
       currentState = AuthStateEnum.AUTHENTICATED;
     } on DioError catch (e) {
-      switch (e.response.statusCode) {
+      switch (e.response!.statusCode) {
         case HttpStatus.notFound:
           {
             currentState = AuthStateEnum.REGISTRAION_REQUIRED;
@@ -74,7 +74,7 @@ class AuthState extends ChangeNotifier {
       await _authService.requestQrloAuthFromStorage();
       currentState = AuthStateEnum.AUTHENTICATED;
     } on DioError catch (e) {
-      switch (e.response.statusCode) {
+      switch (e.response!.statusCode) {
         case HttpStatus.notFound:
         case HttpStatus.unauthorized:
         default:

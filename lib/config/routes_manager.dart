@@ -11,10 +11,9 @@ class RoutesManager {
     DashboardRoute(),
     QRCodeSaveRoute(),
   ];
-  FluroRouter _router;
+  FluroRouter _router = FluroRouter();
 
   RoutesManager() {
-    this._router = FluroRouter();
     RoutesManager._routes
         .forEach((route) => _router.define(route.url, handler: route.handler));
   }

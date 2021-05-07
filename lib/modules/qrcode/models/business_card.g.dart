@@ -7,23 +7,27 @@ part of 'business_card.dart';
 // **************************************************************************
 
 BusinessCard _$BusinessCardFromJson(Map<String, dynamic> json) {
-  return $checkedNew('BusinessCard', json, () {
-    final val = BusinessCard(
-      imageUrl: $checkedConvert(json, 'imageUrl', (v) => v as String),
-      firstName: $checkedConvert(json, 'firstName', (v) => v as String),
-      lastName: $checkedConvert(json, 'lastName', (v) => v as String),
-      phoneNumber: $checkedConvert(json, 'phoneNumber', (v) => v as String),
-      email: $checkedConvert(json, 'email', (v) => v as String),
-    );
-    return val;
-  });
+  $checkKeys(json, requiredKeys: const [
+    'firstName',
+    'lastName',
+    'company',
+    'phone',
+    'email'
+  ]);
+  return BusinessCard(
+    firstName: json['firstName'] as String,
+    lastName: json['lastName'] as String,
+    company: json['company'] as String,
+    phone: json['phone'] as String,
+    email: json['email'] as String,
+  );
 }
 
 Map<String, dynamic> _$BusinessCardToJson(BusinessCard instance) =>
     <String, dynamic>{
-      'imageUrl': instance.imageUrl,
       'firstName': instance.firstName,
       'lastName': instance.lastName,
-      'phoneNumber': instance.phoneNumber,
+      'company': instance.company,
+      'phone': instance.phone,
       'email': instance.email,
     };

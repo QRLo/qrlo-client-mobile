@@ -4,7 +4,7 @@ import 'package:qrlo_mobile/modules/qrcode/ui/preview/qrcode_abstract_preview_vi
 class QRCodeGenericPreivewView extends QRCodeAbstractPreviewView {
   final dynamic data;
 
-  QRCodeGenericPreivewView({Key key, this.data}) : super(key: key);
+  QRCodeGenericPreivewView({required this.data});
 
   @override
   Widget build(BuildContext context) {

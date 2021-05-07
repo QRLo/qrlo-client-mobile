@@ -17,7 +17,7 @@ extension OAuthTypeExtension on OAuthType {
       case OAuthType.GOOGLE:
         return OAuthTypeValues.GOOGLE_STRING_VALUE;
       default:
-        return null;
+        throw "Unsupported OAuthType $this";
     }
   }
 }
@@ -32,7 +32,7 @@ class OAuthTypeParser {
       case OAuthTypeValues.GOOGLE_STRING_VALUE:
         return OAuthType.GOOGLE;
       default:
-        return null;
+        throw "Unsupported OAuthType $oAuthType";
     }
   }
 }

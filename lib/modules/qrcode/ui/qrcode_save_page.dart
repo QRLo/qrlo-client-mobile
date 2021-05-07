@@ -4,7 +4,7 @@ import 'package:qrlo_mobile/modules/qrcode/ui/preview/qrcode_abstract_preview_vi
 class QRCodeSavePage extends StatelessWidget {
   final QRCodeAbstractPreviewView qrCodeSaveView;
 
-  QRCodeSavePage({Key key, this.qrCodeSaveView}) : super(key: key);
+  QRCodeSavePage({required this.qrCodeSaveView});
 
   @override
   Widget build(BuildContext context) {

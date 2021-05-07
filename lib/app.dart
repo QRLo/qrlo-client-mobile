@@ -6,8 +6,6 @@ import 'package:qrlo_mobile/modules/auth/ui/pages/auth_entry_page.dart';
 import 'config/dependency_injector.dart';
 
 class App extends StatelessWidget {
-  const App({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

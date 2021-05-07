@@ -8,8 +8,8 @@ class QRCodeSaveRoute extends BaseRoute {
   @override
   Handler generateHandler() {
     return Handler(
-      handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-        final args = context.settings.arguments as QRCodeAbstractPreviewView;
+      handlerFunc: (BuildContext? context, Map<String, dynamic> params) {
+        final args = context!.settings!.arguments as QRCodeAbstractPreviewView;
         return QRCodeSavePage(
           qrCodeSaveView: args,
         );

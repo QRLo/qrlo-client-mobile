@@ -9,7 +9,7 @@ class AuthEntryRoute extends BaseRoute {
   @override
   Handler generateHandler() {
     return Handler(
-      handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+      handlerFunc: (BuildContext? context, Map<String, dynamic> params) {
         return AuthEntryPage();
       },
     );

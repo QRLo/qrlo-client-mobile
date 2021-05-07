@@ -12,8 +12,6 @@ import 'package:qrlo_mobile/modules/auth/ui/views/registration_modal_view.dart';
 import 'package:qrlo_mobile/modules/dashboard/routes/dashboard_route.dart';
 
 class AuthEntryPage extends StatefulWidget {
-  const AuthEntryPage({Key key}) : super(key: key);
-
   @override
   _AuthEntryPageState createState() => _AuthEntryPageState();
 }
@@ -68,6 +66,6 @@ class _AuthEntryPageState extends State<AuthEntryPage> {
       builder: (BuildContext context) => RegistrationModalView(
         constraints: constraints,
       ),
-    ).then((thing) => print(thing));
+    );
   }
 }
