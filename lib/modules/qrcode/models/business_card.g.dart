@@ -7,16 +7,8 @@ part of 'business_card.dart';
 // **************************************************************************
 
 BusinessCard _$BusinessCardFromJson(Map<String, dynamic> json) {
-  $checkKeys(json, requiredKeys: const [
-    'firstName',
-    'lastName',
-    'company',
-    'phone',
-    'email'
-  ]);
   return BusinessCard(
-    firstName: json['firstName'] as String,
-    lastName: json['lastName'] as String,
+    id: json['id'] as String?,
     company: json['company'] as String,
     phone: json['phone'] as String,
     email: json['email'] as String,
@@ -25,8 +17,7 @@ BusinessCard _$BusinessCardFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$BusinessCardToJson(BusinessCard instance) =>
     <String, dynamic>{
-      'firstName': instance.firstName,
-      'lastName': instance.lastName,
+      'id': instance.id,
       'company': instance.company,
       'phone': instance.phone,
       'email': instance.email,

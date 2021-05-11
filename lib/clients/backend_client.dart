@@ -53,13 +53,18 @@ class BackendClient {
         }, onError: (DioError e, handler) async {
           if (e.response?.statusCode == 401 &&
               !e.requestOptions.path.startsWith('auth')) {
+            new AuthService().requestQrloAuthFromStorage();
             await getIt<AuthService>().requestQrloAuthFromStorage();
             RequestOptions request = e.response!.requestOptions;
             request.headers["Authorization"] = instance._accessToken;
             var response = await instance._dio.request(
               request.path,
               data: request.data,
-              options: Options(headers: request.headers),
+              options: Options(
+                method: request.method,
+                headers: request.headers,
+                contentType: request.contentType,
+              ),
             );
             return handler.resolve(response);
           }

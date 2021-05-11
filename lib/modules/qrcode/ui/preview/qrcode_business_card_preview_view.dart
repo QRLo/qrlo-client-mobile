@@ -23,7 +23,6 @@ class QRCodeBusinessCardPreviewView extends QRCodeAbstractPreviewView {
                 children: <Widget>[
                   Card(
                     child: ListTile(
-                      title: Text('First Name: ${data.firstName}'),
                       trailing: IconButton(
                         icon: Icon(Icons.edit),
                         onPressed: () {},
@@ -32,7 +31,6 @@ class QRCodeBusinessCardPreviewView extends QRCodeAbstractPreviewView {
                   ),
                   Card(
                     child: ListTile(
-                      title: Text('Last Name: ${data.lastName}'),
                       trailing: IconButton(
                         icon: Icon(Icons.edit),
                         onPressed: () {},

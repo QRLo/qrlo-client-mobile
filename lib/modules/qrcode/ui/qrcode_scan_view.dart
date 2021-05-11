@@ -45,23 +45,6 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isPhysicalDevice && result == null) {
-      final businessCard = BusinessCard(
-        email: "rollee0429@gmail.com",
-        company: "Apple",
-        firstName: "Ro",
-        lastName: "Lee",
-        phone: "4388837674",
-      );
-      Timer(
-        Duration(seconds: 2),
-        () => onDataRead(Barcode(
-          jsonEncode(businessCard.toJson()),
-          BarcodeFormat.code128,
-          [1, 2],
-        )),
-      );
-    }
     return FutureBuilder<dynamic>(
         future: deviceInfoPlugin.iosInfo,
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -80,6 +63,21 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
             isPhysicalDevice = androidDeviceInfo.isPhysicalDevice;
           } else {
             isPhysicalDevice = false;
+          }
+          if (!isPhysicalDevice && result == null) {
+            final businessCard = BusinessCard(
+              email: "rollee0429@gmail.com",
+              company: "Apple",
+              phone: "4388837674",
+            );
+            Timer(
+              Duration(seconds: 2),
+              () => onDataRead(Barcode(
+                jsonEncode(businessCard.toJson()),
+                BarcodeFormat.code128,
+                [1, 2],
+              )),
+            );
           }
           return Scaffold(
             body: Column(
@@ -110,8 +108,9 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      onDataRead(scanData);
+    controller.scannedDataStream.listen((scanData) async {
+      controller.stopCamera();
+      await onDataRead(scanData);
     });
   }
 
