@@ -5,20 +5,13 @@ part 'business_card.g.dart';
 
 @JsonSerializable()
 class BusinessCard extends AbstractQRCodeData {
-  @JsonKey(required: true)
-  String firstName;
-  @JsonKey(required: true)
-  String lastName;
-  @JsonKey(required: true)
+  String? id;
   String company;
-  @JsonKey(required: true)
   String phone;
-  @JsonKey(required: true)
   String email;
 
   BusinessCard({
-    required this.firstName,
-    required this.lastName,
+    this.id,
     required this.company,
     required this.phone,
     required this.email,

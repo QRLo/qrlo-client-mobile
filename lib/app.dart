@@ -17,11 +17,11 @@ class App extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          backgroundColor: const Color(0xFFF89B6C),
+          backgroundColor: const Color(0xFFE57373),
           scaffoldBackgroundColor: Colors.white,
-          primaryColor: const Color(0xFFF37221),
+          primaryColor: const Color(0xFFE57373),
           accentColor: const Color(0xFFF33E21),
-          canvasColor: const Color(0xFFF37221),
+          canvasColor: const Color(0xFFE57373),
         ),
         onGenerateRoute: getIt<RoutesManager>().router.generator,
         home: AuthEntryPage(),

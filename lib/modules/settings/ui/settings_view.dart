@@ -13,36 +13,6 @@ class SettingsView extends StatelessWidget {
       child: Column(
         children: [
           Card(
-            elevation: 8.0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            margin: const EdgeInsets.all(8.0),
-            color: Theme.of(context).primaryColor,
-            child: ListTile(
-              onTap: () => {},
-              title: Text(
-                "UserName",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                  'https://kansai-resilience-forum.jp/wp-content/uploads/2019/02/IAFOR-Blank-Avatar-Image-1.jpg',
-                ),
-              ),
-              trailing: Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Card(
             elevation: 4.0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -73,13 +43,13 @@ class SettingsView extends StatelessWidget {
                   ),
                   title: Text("Log Out"),
                   onTap: () {
-                    context.read<AuthState>().logOut();
-                    getIt<RoutesManager>().router.navigateTo(
-                          context,
-                          AuthEntryRoute().url,
-                          replace: true,
-                          transition: TransitionType.fadeIn,
-                        );
+                    context.read<AuthState>().logOut().then(
+                        (value) => getIt<RoutesManager>().router.navigateTo(
+                              context,
+                              AuthEntryRoute().url,
+                              replace: true,
+                              transition: TransitionType.fadeIn,
+                            ));
                   },
                 ),
               ],

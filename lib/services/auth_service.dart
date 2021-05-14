@@ -5,10 +5,11 @@ import 'package:kakao_flutter_sdk/all.dart';
 import 'package:qrlo_mobile/clients/backend_client.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/main.dart';
-import 'package:qrlo_mobile/modules/auth/models/oauth.dart';
 import 'package:qrlo_mobile/modules/auth/models/oauth_type.dart';
-import 'package:qrlo_mobile/modules/auth/services/domains/auth_domain.dart';
-import 'package:qrlo_mobile/modules/auth/services/domains/integrate_oauth_domain.dart';
+
+import 'domains/auth_domain.dart';
+import 'domains/integrate_oauth_domain.dart';
+import 'domains/oauth_domain.dart';
 
 @injectable
 class AuthService {
@@ -22,7 +23,7 @@ class AuthService {
         : await AuthCodeClient.instance.request();
     AccessTokenResponse token =
         await AuthApi.instance.issueAccessToken(authCode);
-    final oAuth = new OAuth(
+    final oAuth = new OAuthRequest(
       oAuthType: OAuthType.KAKAO,
       oAuthAccessToken: token.accessToken,
     );
@@ -31,12 +32,12 @@ class AuthService {
   }
 
   Future<void> requestQrloAuthFromStorage() async {
-    final OAuth? oAuth = await _fetchAuthFromStorage();
-    if (oAuth == null) return;
+    final OAuthRequest? oAuth = await _fetchAuthFromStorage();
+    if (oAuth == null) throw "Empty Auth Storage";
     await _doRequestQrloAuth(oAuth);
   }
 
-  Future<void> _doRequestQrloAuth(OAuth oAuth) async {
+  Future<void> _doRequestQrloAuth(OAuthRequest oAuth) async {
     var response = await backendClient.conn.post(
       "auth",
       data: oAuth,
@@ -45,7 +46,7 @@ class AuthService {
   }
 
   Future<void> integrateWithOAuth(String email) async {
-    final OAuth? oAuth = await _fetchAuthFromStorage();
+    final OAuthRequest? oAuth = await _fetchAuthFromStorage();
     final IntegrateOAuthRequest integrateOAuthRequest =
         new IntegrateOAuthRequest(
       email: email,
@@ -61,16 +62,17 @@ class AuthService {
 
   Future<void> logOut() async {
     await storage.delete(key: OAUTH_DATA_STORAGE_KEY);
-    backendClient.accessToken = null;
+    backendClient.accessToken = "";
   }
 
-  Future<OAuth?> _fetchAuthFromStorage() async {
+  Future<OAuthRequest?> _fetchAuthFromStorage() async {
     final String? storedOAuth = await storage.read(key: OAUTH_DATA_STORAGE_KEY);
-    if (storedOAuth!.isEmpty) return null;
-    return OAuth.fromJson(jsonDecode(utf8.fuse(base64).decode(storedOAuth)));
+    if (storedOAuth?.isEmpty ?? true) return null;
+    return OAuthRequest.fromJson(
+        jsonDecode(utf8.fuse(base64).decode(storedOAuth!)));
   }
 
-  Future<void> _saveAuthToStorage(OAuth oAuth) async {
+  Future<void> _saveAuthToStorage(OAuthRequest oAuth) async {
     final String base64AuthString =
         utf8.fuse(base64).encode(jsonEncode(oAuth.toJson()));
     await storage.write(key: OAUTH_DATA_STORAGE_KEY, value: base64AuthString);

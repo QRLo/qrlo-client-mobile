@@ -1,21 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'oauth.dart';
+part of 'oauth_domain.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-OAuth _$OAuthFromJson(Map<String, dynamic> json) {
-  return OAuth(
-    oauthType: _$enumDecode(_$OAuthTypeEnumMap, json['oauthType']),
-    connectionId: json['connectionId'] as String,
+OAuthRequest _$OAuthRequestFromJson(Map<String, dynamic> json) {
+  return OAuthRequest(
+    oAuthType: _$enumDecode(_$OAuthTypeEnumMap, json['oAuthType']),
+    oAuthAccessToken: json['oAuthAccessToken'] as String,
   );
 }
 
-Map<String, dynamic> _$OAuthToJson(OAuth instance) => <String, dynamic>{
-      'oauthType': _$OAuthTypeEnumMap[instance.oauthType],
-      'connectionId': instance.connectionId,
+Map<String, dynamic> _$OAuthRequestToJson(OAuthRequest instance) =>
+    <String, dynamic>{
+      'oAuthType': _$OAuthTypeEnumMap[instance.oAuthType],
+      'oAuthAccessToken': instance.oAuthAccessToken,
     };
 
 K _$enumDecode<K, V>(

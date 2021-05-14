@@ -11,6 +11,7 @@ class QRCodeSaveAdapter {
   static QRCodeAbstractPreviewView adaptQRCodeSaveView(String rawData) {
     try {
       var jsonData = jsonDecode(rawData);
+
       try {
         return QRCodeBusinessCardPreviewView(
           data: BusinessCard.fromJson(jsonData),

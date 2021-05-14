@@ -6,10 +6,13 @@ part 'oauth.g.dart';
 
 @JsonSerializable()
 class OAuth {
-  final OAuthType oAuthType;
-  final String oAuthAccessToken;
+  OAuthType oauthType;
+  String connectionId;
 
-  OAuth({required this.oAuthType, required this.oAuthAccessToken});
+  OAuth({
+    required this.oauthType,
+    required this.connectionId,
+  });
 
   factory OAuth.fromJson(Map<String, dynamic> json) => _$OAuthFromJson(json);
   Map<String, dynamic> toJson() => _$OAuthToJson(this);

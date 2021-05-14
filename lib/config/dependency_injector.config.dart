@@ -8,9 +8,9 @@ import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
 import '../clients/backend_client.dart' as _i4;
-import '../modules/auth/services/auth_service.dart' as _i3;
-import '../modules/profile/services/profile_service.dart' as _i5;
 import '../modules/qrcode/ui/qrcode_save_adapter.dart' as _i6;
+import '../services/auth_service.dart' as _i3;
+import '../services/profile_service.dart' as _i5;
 import 'routes_manager.dart' as _i7; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars

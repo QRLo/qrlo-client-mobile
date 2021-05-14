@@ -7,7 +7,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
-import 'package:qrlo_mobile/modules/auth/services/auth_service.dart';
+import 'package:qrlo_mobile/services/auth_service.dart';
 
 @preResolve
 @injectable
@@ -53,13 +53,18 @@ class BackendClient {
         }, onError: (DioError e, handler) async {
           if (e.response?.statusCode == 401 &&
               !e.requestOptions.path.startsWith('auth')) {
+            new AuthService().requestQrloAuthFromStorage();
             await getIt<AuthService>().requestQrloAuthFromStorage();
             RequestOptions request = e.response!.requestOptions;
             request.headers["Authorization"] = instance._accessToken;
             var response = await instance._dio.request(
               request.path,
               data: request.data,
-              options: Options(headers: request.headers),
+              options: Options(
+                method: request.method,
+                headers: request.headers,
+                contentType: request.contentType,
+              ),
             );
             return handler.resolve(response);
           }

@@ -3,27 +3,33 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
-import 'package:qrlo_mobile/modules/auth/services/auth_service.dart';
+import 'package:qrlo_mobile/modules/auth/models/user.dart';
+import 'package:qrlo_mobile/services/auth_service.dart';
+import 'package:qrlo_mobile/services/profile_service.dart';
+import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
 
 enum AuthStateEnum {
   NEED_LOGIN,
   FETCHING,
   AUTHENTICATED,
   REGISTRAION_REQUIRED,
-  REGISTRATION_FAILED
+  REGISTRATION_FAILED,
+  PROFILE_CREATION_REQUIRED,
+  PROFILE_CREATION_FAILED,
+  AUTHORIZED,
 }
 
 class AuthState extends ChangeNotifier {
   AuthStateEnum currentState = AuthStateEnum.NEED_LOGIN;
+  User? profile;
   AuthService get _authService => getIt<AuthService>();
 
-  AuthState() {
-    refreshToken();
+  void setLoading() {
+    currentState = AuthStateEnum.FETCHING;
+    notifyListeners();
   }
 
   Future<void> loginWithKakao() async {
-    currentState = AuthStateEnum.FETCHING;
-    notifyListeners();
     try {
       await _authService.loginWithKakao();
       currentState = AuthStateEnum.AUTHENTICATED;
@@ -34,7 +40,6 @@ class AuthState extends ChangeNotifier {
             currentState = AuthStateEnum.REGISTRAION_REQUIRED;
             break;
           }
-        case HttpStatus.unauthorized:
         default:
           {
             currentState = AuthStateEnum.NEED_LOGIN;
@@ -47,8 +52,6 @@ class AuthState extends ChangeNotifier {
   }
 
   Future<void> integrateWithOAuth(String email) async {
-    currentState = AuthStateEnum.FETCHING;
-    notifyListeners();
     try {
       await _authService.integrateWithOAuth(email);
       currentState = AuthStateEnum.AUTHENTICATED;
@@ -59,32 +62,65 @@ class AuthState extends ChangeNotifier {
     }
   }
 
-  Future<void> logOut() async {
-    currentState = AuthStateEnum.FETCHING;
-    notifyListeners();
-    await _authService.logOut();
-    currentState = AuthStateEnum.NEED_LOGIN;
-    notifyListeners();
+  Future<void> fetchProfile() async {
+    try {
+      profile = await getIt<ProfileService>().fetchProfile();
+      if (profile?.missingProfile?.fields.length == 0)
+        currentState = AuthStateEnum.AUTHORIZED;
+      else
+        currentState = AuthStateEnum.PROFILE_CREATION_REQUIRED;
+    } on DioError {
+      currentState = AuthStateEnum.NEED_LOGIN;
+    } finally {
+      notifyListeners();
+    }
   }
 
-  Future<void> refreshToken() async {
-    currentState = AuthStateEnum.FETCHING;
-    notifyListeners();
+  Future<void> updateProfile(String firstName, String lastName) async {
     try {
-      await _authService.requestQrloAuthFromStorage();
-      currentState = AuthStateEnum.AUTHENTICATED;
+      profile!.firstName = firstName;
+      profile!.lastName = lastName;
+      profile = await getIt<ProfileService>().updateProfile(profile!);
+      currentState = AuthStateEnum.AUTHORIZED;
     } on DioError catch (e) {
-      switch (e.response!.statusCode) {
-        case HttpStatus.notFound:
-        case HttpStatus.unauthorized:
-        default:
-          {
-            currentState = AuthStateEnum.NEED_LOGIN;
-            break;
-          }
+      if (e.response!.statusCode == HttpStatus.forbidden) {
+        currentState = AuthStateEnum.PROFILE_CREATION_FAILED;
       }
     } finally {
       notifyListeners();
     }
+  }
+
+  Future<void> addBusinessCard({
+    required name,
+    required email,
+    required phone,
+  }) async {
+    try {
+      final BusinessCard businessCard =
+          BusinessCard(company: name, phone: phone, email: email);
+      final BusinessCard createdBusinessCard =
+          await getIt<ProfileService>().addBusinessCard(businessCard);
+      profile!.myBusinessCards.add(createdBusinessCard);
+    } on DioError catch (e) {} finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> refreshToken() async {
+    try {
+      await _authService.requestQrloAuthFromStorage();
+      currentState = AuthStateEnum.AUTHENTICATED;
+    } catch (e) {
+      currentState = AuthStateEnum.NEED_LOGIN;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> logOut() async {
+    await _authService.logOut();
+    currentState = AuthStateEnum.NEED_LOGIN;
+    notifyListeners();
   }
 }
