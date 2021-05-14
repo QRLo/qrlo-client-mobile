@@ -7,7 +7,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
-import 'package:qrlo_mobile/modules/auth/services/auth_service.dart';
+import 'package:qrlo_mobile/services/auth_service.dart';
 
 @preResolve
 @injectable

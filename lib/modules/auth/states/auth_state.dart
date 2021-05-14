@@ -4,8 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/modules/auth/models/user.dart';
-import 'package:qrlo_mobile/modules/auth/services/auth_service.dart';
-import 'package:qrlo_mobile/modules/profile/services/profile_service.dart';
+import 'package:qrlo_mobile/services/auth_service.dart';
+import 'package:qrlo_mobile/services/profile_service.dart';
 import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
 
 enum AuthStateEnum {
@@ -91,11 +91,17 @@ class AuthState extends ChangeNotifier {
     }
   }
 
-  Future<void> addBusinessCard(BusinessCard businessCard) async {
+  Future<void> addBusinessCard({
+    required name,
+    required email,
+    required phone,
+  }) async {
     try {
-      businessCard =
+      final BusinessCard businessCard =
+          BusinessCard(company: name, phone: phone, email: email);
+      final BusinessCard createdBusinessCard =
           await getIt<ProfileService>().addBusinessCard(businessCard);
-      profile!.myBusinessCards.add(businessCard);
+      profile!.myBusinessCards.add(createdBusinessCard);
     } on DioError catch (e) {} finally {
       notifyListeners();
     }

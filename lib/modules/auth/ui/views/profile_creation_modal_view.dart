@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qrlo_mobile/modules/auth/services/domains/missing_profile.dart';
 import 'package:qrlo_mobile/modules/auth/states/auth_state.dart';
+import 'package:qrlo_mobile/services/domains/missing_profile.dart';
 
 class ProfileCreationModalView extends StatefulWidget {
   final MissingProfile missingProfile;

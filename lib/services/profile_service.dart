@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:qrlo_mobile/clients/backend_client.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
@@ -22,5 +25,15 @@ class ProfileService {
     var response = await backendClient.conn
         .post("profile/mybusinesscards", data: businessCard.toJson());
     return BusinessCard.fromJson(response.data);
+  }
+
+  Future<Uint8List> getQrCodeImageForBusinessCard(
+      BusinessCard businessCard) async {
+    var response = await getIt<BackendClient>().conn.get<ResponseBody>(
+        "profile/mybusinesscards/${businessCard.id}/generate-qr",
+        options: Options(responseType: ResponseType.stream));
+    return Uint8List.fromList((await response.data!.stream.toList())
+        .expand((element) => element)
+        .toList());
   }
 }

@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qrlo_mobile/modules/auth/models/oauth.dart';
-import 'package:qrlo_mobile/modules/auth/services/domains/missing_profile.dart';
 import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
+import 'package:qrlo_mobile/services/domains/missing_profile.dart';
 
 part 'user.g.dart';
 

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qrlo_mobile/modules/auth/states/auth_state.dart';
+import 'package:qrlo_mobile/modules/profile/ui/cards/business_card_card_view.dart';
 import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
 
 class ProfileView extends StatefulWidget {
   @override
   _ProfileViewState createState() => _ProfileViewState();
+
+  static showCreateProfileDataForm() {}
 }
 
 class _ProfileViewState extends State<ProfileView> {
@@ -52,65 +55,42 @@ class _ProfileViewState extends State<ProfileView> {
             ],
           ),
         ),
-        if (components.length == 0)
-          Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: Text("Start with a new personal data!"),
-                ),
-              ],
-            ),
-          ),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [...components],
-            ),
-          ),
-        ),
+        Builder(builder: (context) {
+          return (components.length == 0)
+              ? Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Text(
+                          "큐알로를 시작해보세요!",
+                          style: new TextStyle(
+                            fontSize: 20.0,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Expanded(
+                  child: SingleChildScrollView(
+                    child: Flex(
+                      direction: Axis.vertical,
+                      children: [...components],
+                    ),
+                  ),
+                );
+        }),
       ],
     );
   }
 
   List<Widget> _buildProfileComponents(List<BusinessCard> businessCards) {
     return businessCards
-        .map(
-          (businessCard) => Card(
-            elevation: 4.0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            margin: const EdgeInsets.all(8.0),
-            child: ExpansionTile(
-              title: ListTile(
-                leading: Icon(
-                  Icons.work,
-                  color: Theme.of(context).primaryColor,
-                ),
-                title: Text("${businessCard.company}"),
-              ),
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(
-                    Icons.email,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  title: Text("${businessCard.email}"),
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.phone_android,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  title: Text("${businessCard.phone}"),
-                ),
-              ],
-            ),
-          ),
-        )
+        .map((businessCard) => BusinessCardCardView(
+            key: Key(businessCard.id!), businessCard: businessCard))
         .toList();
   }
 }

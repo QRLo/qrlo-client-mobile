@@ -5,10 +5,11 @@ import 'package:kakao_flutter_sdk/all.dart';
 import 'package:qrlo_mobile/clients/backend_client.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/main.dart';
-import 'package:qrlo_mobile/modules/auth/services/domains/oauth_domain.dart';
 import 'package:qrlo_mobile/modules/auth/models/oauth_type.dart';
-import 'package:qrlo_mobile/modules/auth/services/domains/auth_domain.dart';
-import 'package:qrlo_mobile/modules/auth/services/domains/integrate_oauth_domain.dart';
+
+import 'domains/auth_domain.dart';
+import 'domains/integrate_oauth_domain.dart';
+import 'domains/oauth_domain.dart';
 
 @injectable
 class AuthService {

@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:qrlo_mobile/modules/auth/services/domains/oauth_domain.dart';
 import 'package:qrlo_mobile/modules/auth/models/oauth_type.dart';
+
+import 'oauth_domain.dart';
 
 part 'integrate_oauth_domain.g.dart';
 

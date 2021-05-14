@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qrlo_mobile/modules/auth/states/auth_state.dart';
 import 'package:qrlo_mobile/modules/dashboard/states/bottom_navigation_state.dart';
 import 'package:qrlo_mobile/modules/data_store/ui/data_store_view.dart';
+import 'package:qrlo_mobile/modules/profile/ui/bottomsheets/business_card_creation_view.dart';
 import 'package:qrlo_mobile/modules/profile/ui/profile_view.dart';
-import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/qrcode_scan_view.dart';
 import 'package:qrlo_mobile/modules/settings/ui/settings_view.dart';
 
@@ -78,13 +77,16 @@ class DashboardEntryPage extends StatelessWidget {
                       elevation: 0.0,
                       child: Icon(Icons.add),
                       backgroundColor: Color(0xFFE57373),
-                      onPressed: () => context
-                          .read<AuthState>()
-                          .addBusinessCard(BusinessCard(
-                            company: "apple",
-                            email: "hyungro_lee@apple.com",
-                            phone: "4388837674",
-                          )),
+                      onPressed: () => {
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.white,
+                          builder: (context) {
+                            return BusinessCardCreationView(
+                                key: Key('business_card_creation_view'));
+                          },
+                        ),
+                      },
                     );
                   return Column();
                 },
