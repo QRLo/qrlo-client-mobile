@@ -21,3 +21,20 @@ class IntegrateOAuthRequest extends OAuthRequest {
       _$IntegrateOAuthRequestFromJson(json);
   Map<String, dynamic> toJson() => _$IntegrateOAuthRequestToJson(this);
 }
+
+@JsonSerializable()
+class VerifyOTPRequest extends OAuthRequest {
+  final String otp;
+
+  VerifyOTPRequest({
+    required OAuthType oAuthType,
+    required String oAuthAccessToken,
+    required this.otp,
+  }) : super(
+          oAuthAccessToken: oAuthAccessToken,
+          oAuthType: oAuthType,
+        );
+  factory VerifyOTPRequest.fromJson(Map<String, dynamic> json) =>
+      _$VerifyOTPRequestFromJson(json);
+  Map<String, dynamic> toJson() => _$VerifyOTPRequestToJson(this);
+}

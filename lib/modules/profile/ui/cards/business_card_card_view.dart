@@ -28,16 +28,28 @@ class _BusinessCardCardViewState extends State<BusinessCardCardView> {
       margin: const EdgeInsets.all(8.0),
       child: ExpansionTile(
         title: ListTile(
-          leading: Icon(Icons.work),
-          title: Text("${widget.businessCard.company}"),
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(
+              'https://musically.com/wp-content/uploads/2021/05/kakao.jpg',
+            ),
+          ),
+          title: Text(
+              "${widget.businessCard.company} ${widget.businessCard.position}"),
         ),
         children: <Widget>[
+          ListTile(
+            leading: Icon(
+              Icons.apartment_rounded,
+              color: Theme.of(context).primaryColor,
+            ),
+            title: Text("${widget.businessCard.company}"),
+          ),
           ListTile(
             leading: Icon(
               Icons.work,
               color: Theme.of(context).primaryColor,
             ),
-            title: Text("${widget.businessCard.company}"),
+            title: Text("${widget.businessCard.position}"),
           ),
           ListTile(
             leading: Icon(

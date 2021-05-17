@@ -45,7 +45,7 @@ class AuthService {
     backendClient.accessToken = AuthResponse.fromJson(response.data).token;
   }
 
-  Future<void> integrateWithOAuth(String email) async {
+  Future<void> requestOAuthIntegration(String email) async {
     final OAuthRequest? oAuth = await _fetchAuthFromStorage();
     final IntegrateOAuthRequest integrateOAuthRequest =
         new IntegrateOAuthRequest(
@@ -55,6 +55,20 @@ class AuthService {
     );
     var response = await backendClient.conn.post(
       "auth/integrate",
+      data: integrateOAuthRequest,
+    );
+    // backendClient.accessToken = AuthResponse.fromJson(response.data).token;
+  }
+
+  Future<void> verifyOTP(String otp) async {
+    final OAuthRequest? oAuth = await _fetchAuthFromStorage();
+    final VerifyOTPRequest integrateOAuthRequest = VerifyOTPRequest(
+      otp: otp,
+      oAuthAccessToken: oAuth!.oAuthAccessToken,
+      oAuthType: oAuth.oAuthType,
+    );
+    var response = await backendClient.conn.post(
+      "auth/otp/verify",
       data: integrateOAuthRequest,
     );
     backendClient.accessToken = AuthResponse.fromJson(response.data).token;

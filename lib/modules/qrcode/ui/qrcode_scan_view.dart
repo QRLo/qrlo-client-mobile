@@ -67,6 +67,7 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
           if (!isPhysicalDevice && result == null) {
             final businessCard = BusinessCard(
               email: "rollee0429@gmail.com",
+              position: "something",
               company: "Apple",
               phone: "4388837674",
             );

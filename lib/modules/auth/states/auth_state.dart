@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -14,6 +15,8 @@ enum AuthStateEnum {
   AUTHENTICATED,
   REGISTRAION_REQUIRED,
   REGISTRATION_FAILED,
+  VERIFICATION_REQUIRED,
+  OTP_FAILED,
   PROFILE_CREATION_REQUIRED,
   PROFILE_CREATION_FAILED,
   AUTHORIZED,
@@ -53,8 +56,19 @@ class AuthState extends ChangeNotifier {
 
   Future<void> integrateWithOAuth(String email) async {
     try {
-      await _authService.integrateWithOAuth(email);
-      currentState = AuthStateEnum.AUTHENTICATED;
+      await _authService.requestOAuthIntegration(email);
+      currentState = AuthStateEnum.VERIFICATION_REQUIRED;
+    } on DioError {
+      currentState = AuthStateEnum.REGISTRATION_FAILED;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> verifyOTP(String otp) async {
+    try {
+      await _authService.verifyOTP(otp);
+      currentState = AuthStateEnum.VERIFICATION_REQUIRED;
     } on DioError {
       currentState = AuthStateEnum.REGISTRATION_FAILED;
     } finally {
@@ -93,12 +107,17 @@ class AuthState extends ChangeNotifier {
 
   Future<void> addBusinessCard({
     required name,
+    required position,
     required email,
     required phone,
   }) async {
     try {
-      final BusinessCard businessCard =
-          BusinessCard(company: name, phone: phone, email: email);
+      final BusinessCard businessCard = BusinessCard(
+        company: name,
+        position: position,
+        phone: phone,
+        email: email,
+      );
       final BusinessCard createdBusinessCard =
           await getIt<ProfileService>().addBusinessCard(businessCard);
       profile!.myBusinessCards.add(createdBusinessCard);
@@ -116,6 +135,15 @@ class AuthState extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  void pollVerificationRequest() {
+    Timer.periodic(Duration(seconds: 1), (timer) async {
+      await _authService.requestQrloAuthFromStorage();
+      currentState = AuthStateEnum.AUTHENTICATED;
+      timer.cancel();
+      notifyListeners();
+    });
   }
 
   Future<void> logOut() async {

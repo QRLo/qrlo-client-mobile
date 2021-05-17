@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qrlo_mobile/modules/dashboard/states/bottom_navigation_state.dart';
 import 'package:qrlo_mobile/modules/data_store/ui/data_store_view.dart';
-import 'package:qrlo_mobile/modules/profile/ui/bottomsheets/business_card_creation_view.dart';
+import 'package:qrlo_mobile/modules/business_card/ui/business_card_creation_view.dart';
 import 'package:qrlo_mobile/modules/profile/ui/profile_view.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/qrcode_scan_view.dart';
 import 'package:qrlo_mobile/modules/settings/ui/settings_view.dart';

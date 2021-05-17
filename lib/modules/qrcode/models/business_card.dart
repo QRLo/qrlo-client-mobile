@@ -7,12 +7,14 @@ part 'business_card.g.dart';
 class BusinessCard extends AbstractQRCodeData {
   String? id;
   String company;
+  String position;
   String phone;
   String email;
 
   BusinessCard({
     this.id,
     required this.company,
+    required this.position,
     required this.phone,
     required this.email,
   });

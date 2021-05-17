@@ -54,3 +54,18 @@ const _$OAuthTypeEnumMap = {
   OAuthType.NAVER: 'NAVER',
   OAuthType.GOOGLE: 'GOOGLE',
 };
+
+VerifyOTPRequest _$VerifyOTPRequestFromJson(Map<String, dynamic> json) {
+  return VerifyOTPRequest(
+    oAuthType: _$enumDecode(_$OAuthTypeEnumMap, json['oAuthType']),
+    oAuthAccessToken: json['oAuthAccessToken'] as String,
+    otp: json['otp'] as String,
+  );
+}
+
+Map<String, dynamic> _$VerifyOTPRequestToJson(VerifyOTPRequest instance) =>
+    <String, dynamic>{
+      'oAuthType': _$OAuthTypeEnumMap[instance.oAuthType],
+      'oAuthAccessToken': instance.oAuthAccessToken,
+      'otp': instance.otp,
+    };

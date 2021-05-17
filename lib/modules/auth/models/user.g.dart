@@ -18,6 +18,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
     oauths: (json['oauths'] as List<dynamic>)
         .map((e) => OAuth.fromJson(e as Map<String, dynamic>))
         .toList(),
+    verified: json['verified'] as bool,
     missingProfile: json['missingProfile'] == null
         ? null
         : MissingProfile.fromJson(
@@ -33,6 +34,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'lastName': instance.lastName,
       'myBusinessCards': instance.myBusinessCards,
       'oauths': instance.oauths,
+      'verified': instance.verified,
       'missingProfile': instance.missingProfile,
       'version': instance.version,
     };

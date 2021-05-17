@@ -20,6 +20,7 @@ class App extends StatelessWidget {
           backgroundColor: const Color(0xFFE57373),
           scaffoldBackgroundColor: Colors.white,
           primaryColor: const Color(0xFFE57373),
+          buttonColor: const Color(0xFFE57373),
           accentColor: const Color(0xFFF33E21),
           canvasColor: const Color(0xFFE57373),
         ),

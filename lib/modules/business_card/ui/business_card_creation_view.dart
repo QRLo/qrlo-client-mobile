@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/modules/auth/states/auth_state.dart';
-import 'package:qrlo_mobile/services/profile_service.dart';
 
 class BusinessCardCreationView extends StatefulWidget {
   BusinessCardCreationView({required Key key}) : super(key: key);
@@ -14,11 +12,14 @@ class BusinessCardCreationView extends StatefulWidget {
 
 class _BusinessCardCreationViewState extends State<BusinessCardCreationView> {
   TextEditingController companyNameController = TextEditingController();
+  TextEditingController companyPostiionController = TextEditingController();
   TextEditingController companyEmailController = TextEditingController();
   TextEditingController companyPhoneController = TextEditingController();
+
   @override
   void dispose() {
     companyEmailController.dispose();
+    companyPostiionController.dispose();
     companyNameController.dispose();
     companyPhoneController.dispose();
     super.dispose();
@@ -51,8 +52,19 @@ class _BusinessCardCreationViewState extends State<BusinessCardCreationView> {
               TextField(
                 controller: companyNameController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_circle),
+                  prefixIcon: Icon(Icons.apartment_rounded),
                   hintText: "회사명",
+                ),
+                style: TextStyle(fontSize: 20.0, color: Colors.black),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextField(
+                controller: companyPostiionController,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.work),
+                  hintText: "직책",
                 ),
                 style: TextStyle(fontSize: 20.0, color: Colors.black),
               ),
@@ -103,6 +115,7 @@ class _BusinessCardCreationViewState extends State<BusinessCardCreationView> {
                       context.read<AuthState>()
                         ..addBusinessCard(
                           name: companyNameController.text,
+                          position: companyPostiionController.text,
                           email: companyEmailController.text,
                           phone: companyPhoneController.text,
                         );
