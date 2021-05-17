@@ -65,17 +65,6 @@ class AuthState extends ChangeNotifier {
     }
   }
 
-  Future<void> verifyOTP(String otp) async {
-    try {
-      await _authService.verifyOTP(otp);
-      currentState = AuthStateEnum.VERIFICATION_REQUIRED;
-    } on DioError {
-      currentState = AuthStateEnum.REGISTRATION_FAILED;
-    } finally {
-      notifyListeners();
-    }
-  }
-
   Future<void> fetchProfile() async {
     try {
       profile = await getIt<ProfileService>().fetchProfile();
