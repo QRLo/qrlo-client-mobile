@@ -13,6 +13,7 @@ class User {
   String? lastName;
   List<BusinessCard> myBusinessCards;
   List<OAuth> oauths;
+  bool verified;
   MissingProfile? missingProfile;
   int? version;
 
@@ -23,6 +24,7 @@ class User {
     required this.lastName,
     required this.myBusinessCards,
     required this.oauths,
+    required this.verified,
     this.missingProfile,
     this.version,
   });

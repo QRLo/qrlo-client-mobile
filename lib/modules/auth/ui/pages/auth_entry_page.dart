@@ -6,6 +6,7 @@ import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/config/routes_manager.dart';
 import 'package:qrlo_mobile/modules/auth/states/auth_state.dart';
 import 'package:qrlo_mobile/modules/auth/ui/views/auth_loading_view.dart';
+import 'package:qrlo_mobile/modules/auth/ui/views/email_verification_modal_view.dart';
 import 'package:qrlo_mobile/modules/auth/ui/views/profile_creation_modal_view.dart';
 import 'package:qrlo_mobile/modules/auth/ui/views/registration_modal_view.dart';
 import 'package:qrlo_mobile/modules/dashboard/routes/dashboard_route.dart';
@@ -45,9 +46,22 @@ class _AuthEntryPageState extends State<AuthEntryPage> {
               context: context,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.grey[300],
               builder: (BuildContext context) => RegistrationModalView(
                     key: Key("RegistrationModalView"),
+                  ));
+        });
+        break;
+      case AuthStateEnum.VERIFICATION_REQUIRED:
+        Future.microtask(() {
+          showModalBottomSheet<String>(
+              context: context,
+              isDismissible: false,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              backgroundColor: Colors.grey[300],
+              builder: (BuildContext context) => EmailVerificationView(
+                    key: Key("email_verification_view"),
                   ));
         });
         break;

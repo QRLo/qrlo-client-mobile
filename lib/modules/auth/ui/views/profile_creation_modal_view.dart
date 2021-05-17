@@ -76,14 +76,12 @@ class _ProfileCreationModalViewState extends State<ProfileCreationModalView> {
                   child: Text("프로필 생성", style: TextStyle(fontSize: 20)),
                 ),
                 style: ButtonStyle(
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.grey[800]!),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(color: Colors.red)))),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
                 onPressed: () {
                   authState.updateProfile(
                       firstNameController.text, lastNameController.text);
