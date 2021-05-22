@@ -6,6 +6,7 @@ import 'package:qrlo_mobile/clients/backend_client.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/modules/auth/models/user.dart';
 import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
+import 'package:qrlo_mobile/services/domains/missing_profile.dart';
 
 @injectable
 class ProfileService {
