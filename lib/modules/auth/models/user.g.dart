@@ -8,22 +8,22 @@ part of 'user.dart';
 
 User _$UserFromJson(Map<String, dynamic> json) {
   return User(
-    id: json['id'] as String,
+    id: json['id'] as int?,
     email: json['email'] as String,
     firstName: json['firstName'] as String?,
     lastName: json['lastName'] as String?,
-    myBusinessCards: (json['myBusinessCards'] as List<dynamic>)
-        .map((e) => BusinessCard.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    oauths: (json['oauths'] as List<dynamic>)
-        .map((e) => OAuth.fromJson(e as Map<String, dynamic>))
-        .toList(),
     verified: json['verified'] as bool,
     missingProfile: json['missingProfile'] == null
         ? null
         : MissingProfile.fromJson(
             json['missingProfile'] as Map<String, dynamic>),
     version: json['version'] as int?,
+    createdAt: json['createdAt'] == null
+        ? null
+        : DateTime.parse(json['createdAt'] as String),
+    updatedAt: json['updatedAt'] == null
+        ? null
+        : DateTime.parse(json['updatedAt'] as String),
   );
 }
 
@@ -32,9 +32,9 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'email': instance.email,
       'firstName': instance.firstName,
       'lastName': instance.lastName,
-      'myBusinessCards': instance.myBusinessCards,
-      'oauths': instance.oauths,
       'verified': instance.verified,
       'missingProfile': instance.missingProfile,
       'version': instance.version,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
     };

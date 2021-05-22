@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qrlo_mobile/modules/auth/states/auth_state.dart';
+import 'package:qrlo_mobile/modules/profile/states/profile_state.dart';
 
 class BusinessCardCreationView extends StatefulWidget {
   BusinessCardCreationView({required Key key}) : super(key: key);
@@ -112,7 +112,7 @@ class _BusinessCardCreationViewState extends State<BusinessCardCreationView> {
                                     borderRadius: BorderRadius.circular(10),
                                     side: BorderSide(color: Colors.red)))),
                     onPressed: () {
-                      context.read<AuthState>()
+                      context.read<ProfileState>()
                         ..addBusinessCard(
                           name: companyNameController.text,
                           position: companyPostiionController.text,

@@ -6,10 +6,12 @@ part 'oauth.g.dart';
 
 @JsonSerializable()
 class OAuth {
+  int? id;
   OAuthType oauthType;
   String connectionId;
 
   OAuth({
+    this.id,
     required this.oauthType,
     required this.connectionId,
   });

@@ -69,6 +69,7 @@ class _AuthEntryPageState extends State<AuthEntryPage> {
         Future.microtask(() {
           showModalBottomSheet<String>(
               context: context,
+              isDismissible: false,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               backgroundColor: Colors.white,

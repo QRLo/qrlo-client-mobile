@@ -4,6 +4,7 @@ import 'package:qrlo_mobile/config/routes_manager.dart';
 import 'package:qrlo_mobile/modules/auth/states/auth_state.dart';
 import 'package:qrlo_mobile/modules/auth/ui/pages/auth_entry_page.dart';
 import 'config/dependency_injector.dart';
+import 'modules/profile/states/profile_state.dart';
 
 class App extends StatelessWidget {
   @override
@@ -12,6 +13,9 @@ class App extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => AuthState(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProfileState(),
         ),
       ],
       child: MaterialApp(

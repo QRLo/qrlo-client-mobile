@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qrlo_mobile/modules/auth/states/auth_state.dart';
+import 'package:qrlo_mobile/modules/profile/states/profile_state.dart';
 import 'package:qrlo_mobile/modules/profile/ui/cards/business_card_card_view.dart';
 import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
 
@@ -13,11 +13,16 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   @override
-  Widget build(BuildContext context) {
-    final authState = context.watch<AuthState>();
+  void initState() {
+    super.initState();
+    context.read<ProfileState>().fetchAllProfiles();
+  }
 
-    final components =
-        _buildProfileComponents(authState.profile!.myBusinessCards);
+  @override
+  Widget build(BuildContext context) {
+    final profileState = context.watch<ProfileState>();
+
+    final components = _buildProfileComponents(profileState.myBusinessCards);
     return Column(
       children: [
         Card(
@@ -31,7 +36,7 @@ class _ProfileViewState extends State<ProfileView> {
             children: [
               ListTile(
                 title: Text(
-                  "${authState.profile!.lastName}${authState.profile!.firstName}",
+                  "${profileState.basicProfile?.lastName}${profileState.basicProfile?.firstName}",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
@@ -45,7 +50,7 @@ class _ProfileViewState extends State<ProfileView> {
               ),
               ListTile(
                 title: Text(
-                  "${authState.profile!.email}",
+                  "${profileState.basicProfile?.email}",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
@@ -90,7 +95,7 @@ class _ProfileViewState extends State<ProfileView> {
   List<Widget> _buildProfileComponents(List<BusinessCard> businessCards) {
     return businessCards
         .map((businessCard) => BusinessCardCardView(
-            key: Key(businessCard.id!), businessCard: businessCard))
+            key: Key(businessCard.id!.toString()), businessCard: businessCard))
         .toList();
   }
 }
