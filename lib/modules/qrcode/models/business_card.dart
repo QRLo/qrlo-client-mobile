@@ -5,18 +5,22 @@ part 'business_card.g.dart';
 
 @JsonSerializable()
 class BusinessCard extends AbstractQRCodeData {
-  String? id;
+  int? id;
+  int? userId;
   String company;
   String position;
   String phone;
   String email;
+  bool? emailVerified;
 
   BusinessCard({
     this.id,
+    this.userId,
     required this.company,
     required this.position,
     required this.phone,
     required this.email,
+    this.emailVerified,
   });
 
   factory BusinessCard.fromJson(Map<String, dynamic> json) =>

@@ -10,8 +10,12 @@ import 'package:qrlo_mobile/modules/settings/ui/settings_view.dart';
 class DashboardEntryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => BottomNavigationState(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => BottomNavigationState(),
+        ),
+      ],
       child: Consumer<BottomNavigationState>(
         builder: (context, provider, _) {
           return Scaffold(
@@ -24,6 +28,7 @@ class DashboardEntryPage extends StatelessWidget {
               ),
               body: Builder(
                 builder: (context) {
+                  print(provider.currTab);
                   switch (provider.currTab) {
                     case NavigationTab.profile:
                       return ProfileView();

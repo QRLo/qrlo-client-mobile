@@ -25,7 +25,7 @@ class BackendClient {
   static Future<BackendClient> create() async {
     final instance = BackendClient();
     await instance.conn.get('health');
-    Timer.periodic(new Duration(seconds: 30), (_) async {
+    Timer.periodic(new Duration(minutes: 30), (_) async {
       await getIt<BackendClient>().conn.get('health');
     });
     Directory appDocDir = await getApplicationDocumentsDirectory();

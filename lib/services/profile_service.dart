@@ -11,7 +11,7 @@ import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
 class ProfileService {
   BackendClient get backendClient => getIt<BackendClient>();
 
-  Future<User> fetchProfile() async {
+  Future<User> fetchBasicProfile() async {
     var response = await backendClient.conn.get("profile");
     return User.fromJson(response.data);
   }
@@ -35,5 +35,13 @@ class ProfileService {
     return Uint8List.fromList((await response.data!.stream.toList())
         .expand((element) => element)
         .toList());
+  }
+
+  Future<List<BusinessCard>> fetchBusinessCards() async {
+    var response = await backendClient.conn.get("profile/mybusinesscards");
+
+    return (response.data as List)
+        .map((e) => BusinessCard.fromJson(e))
+        .toList();
   }
 }

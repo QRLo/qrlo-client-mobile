@@ -8,12 +8,14 @@ part of 'oauth.dart';
 
 OAuth _$OAuthFromJson(Map<String, dynamic> json) {
   return OAuth(
+    id: json['id'] as int?,
     oauthType: _$enumDecode(_$OAuthTypeEnumMap, json['oauthType']),
     connectionId: json['connectionId'] as String,
   );
 }
 
 Map<String, dynamic> _$OAuthToJson(OAuth instance) => <String, dynamic>{
+      'id': instance.id,
       'oauthType': _$OAuthTypeEnumMap[instance.oauthType],
       'connectionId': instance.connectionId,
     };
