@@ -56,7 +56,16 @@ class _BusinessCardCardViewState extends State<BusinessCardCardView> {
               Icons.email,
               color: Theme.of(context).primaryColor,
             ),
-            title: Text("${widget.businessCard.email}"),
+            title: Row(
+              children: [
+                Text("${widget.businessCard.email} "),
+                if (widget.businessCard.emailVerified != null &&
+                    widget.businessCard.emailVerified == true)
+                  Icon(
+                    Icons.check_circle,
+                  ),
+              ],
+            ),
           ),
           ListTile(
             leading: Icon(
