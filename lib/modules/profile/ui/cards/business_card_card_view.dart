@@ -61,8 +61,11 @@ class _BusinessCardCardViewState extends State<BusinessCardCardView> {
                 Text("${widget.businessCard.email} "),
                 if (widget.businessCard.emailVerified != null &&
                     widget.businessCard.emailVerified == true)
-                  Icon(
-                    Icons.check_circle,
+                  Tooltip(
+                    message: "인증되었습니다",
+                    child: Icon(
+                      Icons.check_circle,
+                    ),
                   ),
               ],
             ),
