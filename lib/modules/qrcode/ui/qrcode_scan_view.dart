@@ -16,6 +16,20 @@ import 'package:qrlo_mobile/modules/qrcode/ui/preview/qrcode_abstract_preview_vi
 import 'package:qrlo_mobile/modules/qrcode/ui/qrcode_save_adapter.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/exceptions/qrcode_not_existent_exception.dart';
 
+const MOCK_SCANNED_DATA = '''
+BEGIN:VCARD
+VERSION:3.0
+PRODID:ez-vcard 0.11.2
+N:이;형로
+ORG:Somewhere
+TITLE:Software Engineer
+EMAIL;TYPE=work:rolee0429@gmail.com
+TEL:1231231234
+QBCUID:25
+QBCID:7
+END:VCARD
+''';
+
 class QRCodeScanView extends StatefulWidget {
   @override
   _QRCodeScanViewState createState() => _QRCodeScanViewState();
@@ -65,16 +79,10 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
             isPhysicalDevice = false;
           }
           if (!isPhysicalDevice && result == null) {
-            final businessCard = BusinessCard(
-              email: "rollee0429@gmail.com",
-              position: "something",
-              company: "Apple",
-              phone: "4388837674",
-            );
             Timer(
               Duration(seconds: 2),
               () => onDataRead(Barcode(
-                jsonEncode(businessCard.toJson()),
+                MOCK_SCANNED_DATA,
                 BarcodeFormat.code128,
                 [1, 2],
               )),
