@@ -10,7 +10,6 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/config/routes_manager.dart';
 import 'package:qrlo_mobile/modules/dashboard/states/bottom_navigation_state.dart';
-import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
 import 'package:qrlo_mobile/modules/qrcode/routes/qrcode_save_route.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/preview/qrcode_abstract_preview_view.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/qrcode_save_adapter.dart';
@@ -25,8 +24,7 @@ ORG:Somewhere
 TITLE:Software Engineer
 EMAIL;TYPE=work:rolee0429@gmail.com
 TEL:1231231234
-QBCUID:25
-QBCID:7
+QBCD:eyJpZCI6MjUsInVzZXJJZCI6N30=
 END:VCARD
 ''';
 
@@ -132,7 +130,7 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
   Future onDataRead(Barcode data) async {
     try {
       QRCodeAbstractPreviewView qrCodeSaveView =
-          QRCodeSaveAdapter.adaptQRCodeSaveView(data.code);
+          await QRCodeSaveAdapter.adaptQRCodeSaveView(data.code);
       await getIt<RoutesManager>().router.navigateTo(
             context,
             QRCodeSaveRoute().url,

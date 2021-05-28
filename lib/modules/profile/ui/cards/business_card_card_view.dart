@@ -2,11 +2,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
-import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
+import 'package:qrlo_mobile/modules/qrcode/models/user_business_card.dart';
 import 'package:qrlo_mobile/services/profile_service.dart';
 
 class BusinessCardCardView extends StatefulWidget {
-  final BusinessCard businessCard;
+  final UserBusinessCard businessCard;
 
   const BusinessCardCardView({
     required Key key,

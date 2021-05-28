@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
+import 'package:qrlo_mobile/modules/qrcode/models/user_business_card.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/preview/qrcode_abstract_preview_view.dart';
 
 class QRCodeBusinessCardPreviewView extends QRCodeAbstractPreviewView {
-  final BusinessCard data;
+  final UserBusinessCard data;
 
   QRCodeBusinessCardPreviewView({required this.data});
 

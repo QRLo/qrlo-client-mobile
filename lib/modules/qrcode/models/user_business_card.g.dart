@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'business_card.dart';
+part of 'user_business_card.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-BusinessCard _$BusinessCardFromJson(Map<String, dynamic> json) {
-  return BusinessCard(
+UserBusinessCard _$UserBusinessCardFromJson(Map<String, dynamic> json) {
+  return UserBusinessCard(
     id: json['id'] as int?,
     userId: json['userId'] as int?,
     company: json['company'] as String,
@@ -18,7 +18,7 @@ BusinessCard _$BusinessCardFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$BusinessCardToJson(BusinessCard instance) =>
+Map<String, dynamic> _$UserBusinessCardToJson(UserBusinessCard instance) =>
     <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,
