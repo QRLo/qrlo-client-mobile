@@ -78,16 +78,17 @@ class _BusinessCardCardViewState extends State<BusinessCardCardView> {
             title: Text("${widget.businessCard.phone}"),
           ),
           ListTile(
-              title: Row(
-            children: [
-              Expanded(
-                child: TextButton(
-                  onPressed: () => _displayQRCode(context),
-                  child: Text("QR 코드"),
+            title: Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => _displayQRCode(context),
+                    child: Text("QR 코드"),
+                  ),
                 ),
-              ),
-            ],
-          )),
+              ],
+            ),
+          ),
         ],
       ),
     );

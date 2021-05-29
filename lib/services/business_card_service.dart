@@ -7,11 +7,8 @@ import 'package:qrlo_mobile/modules/qrcode/models/user_business_card.dart';
 class BusinessCardService {
   BackendClient get backendClient => getIt<BackendClient>();
 
-  Future<UserBusinessCard> getBusinessCardForUserId(
-      int businessCardId, int userId) async {
-    var response = await backendClient.conn
-        .get("users/$userId/businesscards/$businessCardId");
-
+  Future<UserBusinessCard> getBusinessCardById(int id) async {
+    var response = await backendClient.conn.get("businesscards/$id");
     return UserBusinessCard.fromJson(response.data);
   }
 }

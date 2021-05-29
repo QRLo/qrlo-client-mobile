@@ -10,6 +10,8 @@ UserBusinessCard _$UserBusinessCardFromJson(Map<String, dynamic> json) {
   return UserBusinessCard(
     id: json['id'] as int?,
     userId: json['userId'] as int?,
+    firstName: json['firstName'] as String?,
+    lastName: json['lastName'] as String?,
     company: json['company'] as String,
     position: json['position'] as String,
     phone: json['phone'] as String,
@@ -22,6 +24,8 @@ Map<String, dynamic> _$UserBusinessCardToJson(UserBusinessCard instance) =>
     <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
       'company': instance.company,
       'position': instance.position,
       'phone': instance.phone,

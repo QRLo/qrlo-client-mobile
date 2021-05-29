@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -20,11 +19,11 @@ BEGIN:VCARD
 VERSION:3.0
 PRODID:ez-vcard 0.11.2
 N:이;형로
-ORG:Somewhere
+ORG:Apple
 TITLE:Software Engineer
 EMAIL;TYPE=work:rolee0429@gmail.com
 TEL:1231231234
-QBCD:eyJpZCI6MjUsInVzZXJJZCI6N30=
+UID:26
 END:VCARD
 ''';
 

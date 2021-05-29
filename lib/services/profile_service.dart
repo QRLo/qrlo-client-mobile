@@ -46,4 +46,11 @@ class ProfileService {
         .map((e) => UserBusinessCard.fromJson(e))
         .toList();
   }
+
+  Future<UserBusinessCard> addQrloContact(int businessCardId) async {
+    var response = await backendClient.conn.post("profile/contacts", data: {
+      "id": businessCardId,
+    });
+    return UserBusinessCard.fromJson(response.data);
+  }
 }

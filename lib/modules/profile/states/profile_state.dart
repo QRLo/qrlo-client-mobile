@@ -8,6 +8,7 @@ class ProfileState extends ChangeNotifier {
   ProfileService profileService = getIt<ProfileService>();
   User? basicProfile;
   List<UserBusinessCard> myBusinessCards = [];
+  List<UserBusinessCard> contacts = [];
 
   Future<void> fetchAllProfiles() async {
     var responses = await Future.wait([
@@ -40,5 +41,12 @@ class ProfileState extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  Future<void> addContact(int businessCardId) async {
+    final UserBusinessCard addedBusinessCard =
+        await profileService.addQrloContact(businessCardId);
+    contacts.add(addedBusinessCard);
+    notifyListeners();
   }
 }
