@@ -45,7 +45,7 @@ class QRCodeBusinessCardPreviewView extends QRCodeAbstractPreviewView {
                       color: Theme.of(context).primaryColor,
                     ),
                     title: Text(data.position),
-                    subtitle: Text("직함"),
+                    subtitle: Text("직책"),
                   ),
                   ListTile(
                     leading: Icon(
@@ -89,6 +89,7 @@ class QRCodeBusinessCardPreviewView extends QRCodeAbstractPreviewView {
 
   @override
   onSave(BuildContext context) {
+    context.read<ProfileState>().addContact(data.id!);
     print("hello save!");
   }
 }

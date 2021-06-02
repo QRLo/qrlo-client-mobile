@@ -7,9 +7,17 @@ import 'package:qrlo_mobile/modules/qrcode/models/user_business_card.dart';
 class ContactService {
   BackendClient get backendClient => getIt<BackendClient>();
 
+  Future<List<UserBusinessCard>> fetchQrloContacts() async {
+    var response = await backendClient.conn.get("profile/contacts");
+
+    return (response.data as List)
+        .map((e) => UserBusinessCard.fromJson(e))
+        .toList();
+  }
+
   Future<UserBusinessCard> addQrloContact(int businessCardId) async {
     var response = await backendClient.conn.post("profile/contacts", data: {
-      "id": businessCardId,
+      "businessCardId": businessCardId,
     });
     return UserBusinessCard.fromJson(response.data);
   }
