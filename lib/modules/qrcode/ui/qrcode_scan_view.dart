@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -10,11 +9,23 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/config/routes_manager.dart';
 import 'package:qrlo_mobile/modules/dashboard/states/bottom_navigation_state.dart';
-import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
 import 'package:qrlo_mobile/modules/qrcode/routes/qrcode_save_route.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/preview/qrcode_abstract_preview_view.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/qrcode_save_adapter.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/exceptions/qrcode_not_existent_exception.dart';
+
+const MOCK_SCANNED_DATA = '''
+BEGIN:VCARD
+VERSION:3.0
+PRODID:ez-vcard 0.11.2
+N:이;형로
+ORG:Apple
+TITLE:Software Engineer
+EMAIL;TYPE=work:rolee0429@gmail.com
+TEL:1231231234
+UID:1
+END:VCARD
+''';
 
 class QRCodeScanView extends StatefulWidget {
   @override
@@ -44,6 +55,12 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
   }
 
   @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
         future: deviceInfoPlugin.iosInfo,
@@ -65,16 +82,10 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
             isPhysicalDevice = false;
           }
           if (!isPhysicalDevice && result == null) {
-            final businessCard = BusinessCard(
-              email: "rollee0429@gmail.com",
-              position: "something",
-              company: "Apple",
-              phone: "4388837674",
-            );
             Timer(
               Duration(seconds: 2),
               () => onDataRead(Barcode(
-                jsonEncode(businessCard.toJson()),
+                MOCK_SCANNED_DATA,
                 BarcodeFormat.code128,
                 [1, 2],
               )),
@@ -115,16 +126,10 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
     });
   }
 
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-  }
-
   Future onDataRead(Barcode data) async {
     try {
       QRCodeAbstractPreviewView qrCodeSaveView =
-          QRCodeSaveAdapter.adaptQRCodeSaveView(data.code);
+          await QRCodeSaveAdapter.adaptQRCodeSaveView(data.code);
       await getIt<RoutesManager>().router.navigateTo(
             context,
             QRCodeSaveRoute().url,

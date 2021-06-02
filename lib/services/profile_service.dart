@@ -5,7 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:qrlo_mobile/clients/backend_client.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/modules/auth/models/user.dart';
-import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
+import 'package:qrlo_mobile/modules/qrcode/models/user_business_card.dart';
 import 'package:qrlo_mobile/services/domains/missing_profile.dart';
 
 @injectable
@@ -22,27 +22,28 @@ class ProfileService {
     return User.fromJson(response.data);
   }
 
-  Future<BusinessCard> addBusinessCard(BusinessCard businessCard) async {
+  Future<UserBusinessCard> addBusinessCard(
+      UserBusinessCard businessCard) async {
     var response = await backendClient.conn
-        .post("profile/mybusinesscards", data: businessCard.toJson());
-    return BusinessCard.fromJson(response.data);
+        .post("profile/businesscards", data: businessCard.toJson());
+    return UserBusinessCard.fromJson(response.data);
   }
 
   Future<Uint8List> getQrCodeImageForBusinessCard(
-      BusinessCard businessCard) async {
+      UserBusinessCard businessCard) async {
     var response = await getIt<BackendClient>().conn.get<ResponseBody>(
-        "profile/mybusinesscards/${businessCard.id}/generate-qr",
+        "profile/businesscards/${businessCard.id}/generate-qr",
         options: Options(responseType: ResponseType.stream));
     return Uint8List.fromList((await response.data!.stream.toList())
         .expand((element) => element)
         .toList());
   }
 
-  Future<List<BusinessCard>> fetchBusinessCards() async {
-    var response = await backendClient.conn.get("profile/mybusinesscards");
+  Future<List<UserBusinessCard>> fetchBusinessCards() async {
+    var response = await backendClient.conn.get("profile/businesscards");
 
     return (response.data as List)
-        .map((e) => BusinessCard.fromJson(e))
+        .map((e) => UserBusinessCard.fromJson(e))
         .toList();
   }
 }

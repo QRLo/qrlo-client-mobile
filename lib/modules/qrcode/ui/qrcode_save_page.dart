@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qrlo_mobile/config/dependency_injector.dart';
+import 'package:qrlo_mobile/config/routes_manager.dart';
+import 'package:qrlo_mobile/modules/dashboard/routes/dashboard_route.dart';
 import 'package:qrlo_mobile/modules/qrcode/ui/preview/qrcode_abstract_preview_view.dart';
 
 class QRCodeSavePage extends StatelessWidget {
@@ -15,7 +18,12 @@ class QRCodeSavePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.done),
             tooltip: 'Save QR Code',
-            onPressed: () {},
+            onPressed: () async {
+              await qrCodeSaveView.onSave(context);
+              getIt<RoutesManager>()
+                  .router
+                  .navigateTo(context, DashboardRoute().url, replace: true);
+            },
           ),
         ],
       ),

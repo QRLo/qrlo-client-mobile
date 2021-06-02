@@ -22,4 +22,9 @@ class QRCodeGenericPreivewView extends QRCodeAbstractPreviewView {
 
   @override
   get title => 'Save QR Code';
+
+  @override
+  onSave(BuildContext context) {
+    print("hello generic save!");
+  }
 }

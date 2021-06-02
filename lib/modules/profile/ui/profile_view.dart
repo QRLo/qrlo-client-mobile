@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qrlo_mobile/modules/profile/states/profile_state.dart';
 import 'package:qrlo_mobile/modules/profile/ui/cards/business_card_card_view.dart';
-import 'package:qrlo_mobile/modules/qrcode/models/business_card.dart';
+import 'package:qrlo_mobile/modules/qrcode/models/user_business_card.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -22,7 +22,7 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     final profileState = context.watch<ProfileState>();
 
-    final components = _buildProfileComponents(profileState.myBusinessCards);
+    final components = _buildBusinessCards(profileState.businessCards);
     return Column(
       children: [
         Card(
@@ -92,7 +92,7 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  List<Widget> _buildProfileComponents(List<BusinessCard> businessCards) {
+  List<Widget> _buildBusinessCards(List<UserBusinessCard> businessCards) {
     return businessCards
         .map((businessCard) => BusinessCardCardView(
             key: Key(businessCard.id!.toString()), businessCard: businessCard))

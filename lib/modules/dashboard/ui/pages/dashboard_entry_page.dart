@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qrlo_mobile/modules/contacts/ui/contacts_view.dart';
 import 'package:qrlo_mobile/modules/dashboard/states/bottom_navigation_state.dart';
 import 'package:qrlo_mobile/modules/data_store/ui/data_store_view.dart';
 import 'package:qrlo_mobile/modules/business_card/ui/business_card_creation_view.dart';
@@ -40,8 +41,8 @@ class DashboardEntryPage extends StatelessWidget {
                       return DataStoreView();
                     case NavigationTab.contacts:
                       return Container(
-                        child: Center(
-                          child: Text(provider.currTab.index.toString()),
+                        child: ContactsView(
+                          key: Key("contacts_view"),
                         ),
                       );
                     default:

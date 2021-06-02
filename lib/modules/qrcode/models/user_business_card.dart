@@ -1,21 +1,25 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qrlo_mobile/modules/qrcode/models/abstract_qrcode_data.dart';
 
-part 'business_card.g.dart';
+part 'user_business_card.g.dart';
 
 @JsonSerializable()
-class BusinessCard extends AbstractQRCodeData {
+class UserBusinessCard extends AbstractQRCodeData {
   int? id;
   int? userId;
+  String? firstName;
+  String? lastName;
   String company;
   String position;
   String phone;
   String email;
   bool? emailVerified;
 
-  BusinessCard({
+  UserBusinessCard({
     this.id,
     this.userId,
+    this.firstName,
+    this.lastName,
     required this.company,
     required this.position,
     required this.phone,
@@ -23,7 +27,7 @@ class BusinessCard extends AbstractQRCodeData {
     this.emailVerified,
   });
 
-  factory BusinessCard.fromJson(Map<String, dynamic> json) =>
-      _$BusinessCardFromJson(json);
-  Map<String, dynamic> toJson() => _$BusinessCardToJson(this);
+  factory UserBusinessCard.fromJson(Map<String, dynamic> json) =>
+      _$UserBusinessCardFromJson(json);
+  Map<String, dynamic> toJson() => _$UserBusinessCardToJson(this);
 }
