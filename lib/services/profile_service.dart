@@ -25,14 +25,14 @@ class ProfileService {
   Future<UserBusinessCard> addBusinessCard(
       UserBusinessCard businessCard) async {
     var response = await backendClient.conn
-        .post("profile/mybusinesscards", data: businessCard.toJson());
+        .post("profile/businesscards", data: businessCard.toJson());
     return UserBusinessCard.fromJson(response.data);
   }
 
   Future<Uint8List> getQrCodeImageForBusinessCard(
       UserBusinessCard businessCard) async {
     var response = await getIt<BackendClient>().conn.get<ResponseBody>(
-        "profile/mybusinesscards/${businessCard.id}/generate-qr",
+        "profile/businesscards/${businessCard.id}/generate-qr",
         options: Options(responseType: ResponseType.stream));
     return Uint8List.fromList((await response.data!.stream.toList())
         .expand((element) => element)
@@ -40,17 +40,10 @@ class ProfileService {
   }
 
   Future<List<UserBusinessCard>> fetchBusinessCards() async {
-    var response = await backendClient.conn.get("profile/mybusinesscards");
+    var response = await backendClient.conn.get("profile/businesscards");
 
     return (response.data as List)
         .map((e) => UserBusinessCard.fromJson(e))
         .toList();
-  }
-
-  Future<UserBusinessCard> addQrloContact(int businessCardId) async {
-    var response = await backendClient.conn.post("profile/contacts", data: {
-      "id": businessCardId,
-    });
-    return UserBusinessCard.fromJson(response.data);
   }
 }

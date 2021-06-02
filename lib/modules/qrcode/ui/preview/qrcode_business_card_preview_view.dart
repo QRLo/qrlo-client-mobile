@@ -88,8 +88,7 @@ class QRCodeBusinessCardPreviewView extends QRCodeAbstractPreviewView {
   get title => 'Save Business Card';
 
   @override
-  Function onSave(BuildContext context) {
-    context.read<ProfileState>().addContact(businessCardId)
-    throw UnimplementedError();
+  onSave(BuildContext context) {
+    print("hello save!");
   }
 }

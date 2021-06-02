@@ -15,7 +15,9 @@ class QRCodeSavePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.done),
             tooltip: 'Save QR Code',
-            onPressed: () {},
+            onPressed: () {
+              qrCodeSaveView.onSave(context);
+            },
           ),
         ],
       ),

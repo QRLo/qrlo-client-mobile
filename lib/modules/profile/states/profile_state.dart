@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:qrlo_mobile/config/dependency_injector.dart';
 import 'package:qrlo_mobile/modules/auth/models/user.dart';
 import 'package:qrlo_mobile/modules/qrcode/models/user_business_card.dart';
+import 'package:qrlo_mobile/services/contact_service.dart';
 import 'package:qrlo_mobile/services/profile_service.dart';
 
 class ProfileState extends ChangeNotifier {
   ProfileService profileService = getIt<ProfileService>();
+  ContactService contactService = getIt<ContactService>();
   User? basicProfile;
-  List<UserBusinessCard> myBusinessCards = [];
+  List<UserBusinessCard> businessCards = [];
   List<UserBusinessCard> contacts = [];
 
   Future<void> fetchAllProfiles() async {
@@ -16,7 +18,7 @@ class ProfileState extends ChangeNotifier {
       profileService.fetchBusinessCards()
     ]);
     basicProfile = responses[0] as User;
-    myBusinessCards = responses[1] as List<UserBusinessCard>;
+    businessCards = responses[1] as List<UserBusinessCard>;
 
     notifyListeners();
   }
@@ -36,17 +38,14 @@ class ProfileState extends ChangeNotifier {
       );
       final UserBusinessCard createdBusinessCard =
           await getIt<ProfileService>().addBusinessCard(businessCard);
-      myBusinessCards.add(createdBusinessCard);
-      // profile!.myBusinessCards.add(createdBusinessCard);
+      businessCards.add(createdBusinessCard);
+      // profile!.businessCards.add(createdBusinessCard);
     } finally {
       notifyListeners();
     }
   }
 
   Future<void> addContact(int businessCardId) async {
-    final UserBusinessCard addedBusinessCard =
-        await profileService.addQrloContact(businessCardId);
-    contacts.add(addedBusinessCard);
-    notifyListeners();
+    await contactService.addQrloContact(businessCardId);
   }
 }

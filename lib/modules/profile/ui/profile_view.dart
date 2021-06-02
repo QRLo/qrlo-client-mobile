@@ -22,7 +22,7 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     final profileState = context.watch<ProfileState>();
 
-    final components = _buildProfileComponents(profileState.myBusinessCards);
+    final components = _buildProfileComponents(profileState.businessCards);
     return Column(
       children: [
         Card(

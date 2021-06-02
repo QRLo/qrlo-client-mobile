@@ -23,7 +23,7 @@ ORG:Apple
 TITLE:Software Engineer
 EMAIL;TYPE=work:rolee0429@gmail.com
 TEL:1231231234
-UID:26
+UID:1
 END:VCARD
 ''';
 
@@ -52,6 +52,12 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
     } else if (Platform.isIOS) {
       controller?.resumeCamera();
     }
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
   }
 
   @override
@@ -118,12 +124,6 @@ class _QRCodeScanViewState extends State<QRCodeScanView> {
       controller.stopCamera();
       await onDataRead(scanData);
     });
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 
   Future onDataRead(Barcode data) async {
